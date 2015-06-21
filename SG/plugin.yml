@@ -1,0 +1,11 @@
+name: survivalgames
+version: 1.0
+main: com.kiro.sg.SGMain
+author: Kiro
+description: sg
+
+commands:
+  survivalgames:
+    usage: / <command>
+    description: SG command
+    aliases: [sg]
