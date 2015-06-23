@@ -17,7 +17,7 @@ public class SupplyCrate implements InventoryHolder
 
 	public void populate()
 	{
-		// populate Chest
+		inventory.setContents(CrateUtils.createContents(9));
 	}
 
 	public void open(Player player)

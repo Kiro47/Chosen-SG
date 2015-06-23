@@ -8,7 +8,7 @@ import java.util.Map;
 public class Crates
 {
 
-	private Map<Location, SupplyCrate> crateMap;
+	private final Map<Location, SupplyCrate> crateMap;
 
 	public Crates()
 	{
