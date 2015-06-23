@@ -1,12 +1,5 @@
 package com.kiro.sg;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.kiro.sg.crates.CrateUtils;
 import com.kiro.sg.listeners.EntityDamage;
 import com.kiro.sg.listeners.PlayerLeaveArena;
@@ -14,15 +7,23 @@ import com.kiro.sg.listeners.PlayerMove;
 import com.kiro.sg.listeners.SignManager;
 import com.kiro.sg.listeners.items.InteractmentItems;
 import com.kiro.sg.listeners.items.Slowball;
+import com.kiro.sg.lobby.LobbyManager;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class SGMain extends JavaPlugin
 {
-
+	private static SGMain instance;
+	private LobbyManager lobbyManager;
 
 	public void onEnable()
 	{
-		ArenaManager.getInstance().setup();
+		instance = this;
+		ArenaManager.getInstance().init();
 
 		CrateUtils.loadLoots();
 
@@ -37,11 +38,19 @@ public class SGMain extends JavaPlugin
 		pm.registerEvents(new InteractmentItems(), this);
 		pm.registerEvents(new Slowball(), this);
 
+		lobbyManager = new LobbyManager();
+
+
 	}
 
-	public static Plugin getPlugin()
+	public LobbyManager getLobbyManager()
 	{
-		return Bukkit.getServer().getPluginManager().getPlugin("survivalgames");
+		return lobbyManager;
+	}
+
+	public static SGMain getPlugin()
+	{
+		return instance;
 	}
 
 	public static WorldEditPlugin getWorldEdit()

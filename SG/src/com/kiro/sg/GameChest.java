@@ -1,18 +1,19 @@
 package com.kiro.sg;
 
-import java.util.Random;
-
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Random;
 
 public class GameChest {
 
 	private Chest chest;
 	private int tier;
 	
-	public GameChest(Chest chest, int tier) {
+	public GameChest(Chest chest, int tier)
+	{
 		this.chest = chest;
 		this.tier = tier;
 	}
@@ -24,21 +25,13 @@ public class GameChest {
 	public int getTier() {
 		return tier;
 	}
-	
-	
-	//public void fillChest() {
-		
-//	}
-	
-	
-	  
-	 //  Find Way To Properly Serialize with Percents.
-	 
+
 	public void fillChest() {
 		
 		Material[] items2 =  {
 				Material.GOLDEN_APPLE, Material.IRON_SWORD, Material.IRON_CHESTPLATE, Material.REDSTONE
 		};
+
 		Material[] items1 = {
 				Material.STONE_SWORD, Material.STONE_AXE, 
 		};
