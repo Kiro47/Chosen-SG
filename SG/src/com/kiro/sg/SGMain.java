@@ -1,17 +1,20 @@
 package com.kiro.sg;
 
-import com.kiro.sg.crates.CrateUtils;
-import com.kiro.sg.listeners.EntityDamage;
-import com.kiro.sg.listeners.PlayerLeaveArena;
-import com.kiro.sg.listeners.PlayerMove;
-import com.kiro.sg.listeners.SignManager;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.kiro.sg.crates.CrateUtils;
+import com.kiro.sg.listeners.EntityDamage;
+import com.kiro.sg.listeners.PlayerLeaveArena;
+import com.kiro.sg.listeners.PlayerMove;
+import com.kiro.sg.listeners.SignManager;
+import com.kiro.sg.listeners.items.InteractmentItems;
+import com.kiro.sg.listeners.items.Slowball;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 public class SGMain extends JavaPlugin
 {
@@ -31,6 +34,8 @@ public class SGMain extends JavaPlugin
 		pm.registerEvents(new PlayerLeaveArena(), this);
 		pm.registerEvents(new PlayerMove(), this);
 		pm.registerEvents(new SignManager(), this);
+		pm.registerEvents(new InteractmentItems(), this);
+		pm.registerEvents(new Slowball(), this);
 
 	}
 
