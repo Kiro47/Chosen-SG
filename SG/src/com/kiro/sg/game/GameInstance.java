@@ -124,6 +124,7 @@ public class GameInstance
 	{
 		setSpectator(player);
 
+
 		World world = player.getWorld();
 		Location location = player.getLocation();
 		world.strikeLightningEffect(location);

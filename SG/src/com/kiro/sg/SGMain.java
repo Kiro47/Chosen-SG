@@ -38,6 +38,7 @@ public class SGMain extends JavaPlugin
 		pm.registerEvents(new PlayerMove(), this);
 		pm.registerEvents(new SignManager(), this);
 		pm.registerEvents(new Slowball(), this);
+		pm.registerEvents(new CrateListener(), this);
 
 		ArenaManager.getInstance().init();
 		VotingMap.loadMaps();
