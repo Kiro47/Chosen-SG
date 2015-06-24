@@ -1,4 +1,4 @@
-package com.kiro.sg.utils;
+package com.kiro.sg.utils.task;
 
 import com.kiro.sg.SGMain;
 import org.bukkit.Location;
