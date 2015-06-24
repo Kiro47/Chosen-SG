@@ -18,7 +18,7 @@ public class GameRunner extends BukkitRunnable
 	public GameRunner(GameInstance instance)
 	{
 		gameInstance = instance;
-		timer = 2;
+		timer = 1;
 
 		runTaskTimer(SGMain.getPlugin(), 20, 20);
 	}

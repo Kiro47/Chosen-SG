@@ -4,7 +4,6 @@ import com.kiro.sg.arena.ArenaManager;
 import com.kiro.sg.commands.CommandManager;
 import com.kiro.sg.crates.CrateUtils;
 import com.kiro.sg.listeners.*;
-import com.kiro.sg.listeners.items.InteractmentItems;
 import com.kiro.sg.listeners.items.Slowball;
 import com.kiro.sg.lobby.LobbyManager;
 import com.kiro.sg.utils.FileUtils;
@@ -38,7 +37,6 @@ public class SGMain extends JavaPlugin
 		pm.registerEvents(new PlayerLeaveArena(), this);
 		pm.registerEvents(new PlayerMove(), this);
 		pm.registerEvents(new SignManager(), this);
-		pm.registerEvents(new InteractmentItems(), this);
 		pm.registerEvents(new Slowball(), this);
 
 		ArenaManager.getInstance().init();

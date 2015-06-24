@@ -92,6 +92,12 @@ public class GameInstance
 
 	public void setSpectator(Player player)
 	{
+		remaining.remove(player);
+		spectators.add(player);
+
+		scoreboard.updatePlayers(remaining.size());
+
+		player.sendMessage(ChatColor.RED + "You have died.");
 		for (Player p : remaining)
 		{
 			p.hidePlayer(player);
@@ -103,22 +109,41 @@ public class GameInstance
 			p.showPlayer(player);
 			player.showPlayer(p);
 		}
-
+		player.setFoodLevel(20);
+		player.setMaxHealth(20.0);
+		player.setHealth(20.0);
 		player.setGameMode(GameMode.ADVENTURE);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 2, 2));
-		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 2, 2));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 20), true);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 20, 20), true);
+
+
 		scoreboard.setGhosts(player);
 	}
 
 	public void playerDeath(Player player)
 	{
-		scoreboard.updatePlayers(remaining.size());
+		setSpectator(player);
+
+		World world = player.getWorld();
+		Location location = player.getLocation();
+		world.strikeLightningEffect(location);
+
+		PlayerInventory inv = player.getInventory();
+		for (ItemStack stack : inv.getContents())
+		{
+			world.dropItemNaturally(location, stack);
+		}
+
+		for (ItemStack stack : inv.getArmorContents())
+		{
+			world.dropItemNaturally(location, stack);
+		}
 	}
 
 	public void removePlayer(Player player)
 	{
 		Meta.removeMetadata(player, "game");
-		if (player.getGameMode() == GameMode.ADVENTURE)
+		if (player.getGameMode() == GameMode.SURVIVAL)
 		{
 			World world = player.getWorld();
 			Location location = player.getLocation();

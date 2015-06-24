@@ -24,7 +24,7 @@ public class EntityDamage implements Listener
 
 		Player p = (Player) e.getEntity();
 		GameInstance instance = GameManager.getInstance(p);
-		if (instance == null || instance.getState() == GameState.STARTING)
+		if (instance == null || instance.getState() == GameState.STARTING || p.getGameMode() == GameMode.ADVENTURE)
 		{
 			e.setCancelled(true);
 			return;
@@ -32,9 +32,11 @@ public class EntityDamage implements Listener
 
 		if (instance.getState() != GameState.STARTING)
 		{
+			e.setCancelled(false);
 			if (p.getGameMode() == GameMode.SURVIVAL && p.getHealth() - e.getFinalDamage() <= 0)
 			{
-				e.setCancelled(false);
+				e.setCancelled(true);
+
 				instance.playerDeath(p);
 			}
 		}
