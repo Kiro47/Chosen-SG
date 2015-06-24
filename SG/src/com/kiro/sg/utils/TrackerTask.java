@@ -55,7 +55,7 @@ public class TrackerTask extends BukkitRunnable {
 						nearest =  players.get(0);
 						message = "" + ChatColor.GREEN + ChatColor.BOLD + "TARGET: " + ChatColor.GOLD + nearest.getName() +
 								" " + ChatColor.GREEN + "DISTANCE: " + ChatColor.GOLD + "" 
-								+ nearest.getLocation().distance(player.getLocation());
+								+ ( (int)nearest.getLocation().distance(player.getLocation()));
 						
 						
 						// Change compass's title
