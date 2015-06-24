@@ -1,6 +1,6 @@
 package com.kiro.sg.commands;
 
-import com.kiro.sg.ArenaManager;
+import com.kiro.sg.arena.ArenaManager;
 import com.kiro.sg.LobbySign;
 import com.kiro.sg.SettingsManager;
 import com.kiro.sg.arena.SGArena;

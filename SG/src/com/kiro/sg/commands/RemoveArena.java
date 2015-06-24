@@ -3,7 +3,7 @@ package com.kiro.sg.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.kiro.sg.ArenaManager;
+import com.kiro.sg.arena.ArenaManager;
 import com.kiro.sg.SettingsManager;
 
 @CommandInfo (description = "Remove an arena.", usage = "<name>", aliases = {"removearena", "ra"}, op = true)

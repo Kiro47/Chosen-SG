@@ -1,5 +1,6 @@
 package com.kiro.sg;
 
+import com.kiro.sg.arena.ArenaManager;
 import com.kiro.sg.crates.CrateUtils;
 import com.kiro.sg.listeners.EntityDamage;
 import com.kiro.sg.listeners.PlayerLeaveArena;

@@ -1,6 +1,5 @@
 package com.kiro.sg.arena;
 
-import com.kiro.sg.ArenaManager;
 import com.kiro.sg.Config;
 import com.kiro.sg.utils.CleanWorldGenerator;
 import com.kiro.sg.utils.FileUtils;

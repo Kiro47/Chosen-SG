@@ -12,8 +12,10 @@ public final class Config
 	public static final File LootConfigFile = new File(ConfigFolder, "loot.yml");
 
 	public static final File ArenaListFile = new File(ConfigFolder, "arenas.yml");
+	public static final File VotingMapFile = new File(ConfigFolder, "voting.yml");
 	public static final File ArenaConfigFolder = new File(ConfigFolder, "/arenas/");
 	public static final File ArenaWorldFolder = new File(ConfigFolder, "/maps/");
+	public static final File ArenaImagesFolder = new File(ConfigFolder, "/images/");
 
 	public static int MIN_PLAYER_COUNT = 1; // 1 for testing
 	public static int MAX_PLAYER_COUNT = 24;
