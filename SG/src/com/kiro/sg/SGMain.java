@@ -12,7 +12,10 @@ import com.kiro.sg.listeners.EntityDamage;
 import com.kiro.sg.listeners.PlayerLeaveArena;
 import com.kiro.sg.listeners.PlayerMove;
 import com.kiro.sg.listeners.SignManager;
-import com.kiro.sg.listeners.items.InteractmentItems;
+import com.kiro.sg.listeners.items.CarePackageUse;
+import com.kiro.sg.listeners.items.HungerRefillCake;
+import com.kiro.sg.listeners.items.NetherstarHeal;
+import com.kiro.sg.listeners.items.RedstoneHealthBonus;
 import com.kiro.sg.listeners.items.Slowball;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
@@ -34,9 +37,13 @@ public class SGMain extends JavaPlugin
 		pm.registerEvents(new PlayerLeaveArena(), this);
 		pm.registerEvents(new PlayerMove(), this);
 		pm.registerEvents(new SignManager(), this);
-		pm.registerEvents(new InteractmentItems(), this);
+		
 		pm.registerEvents(new Slowball(), this);
-
+		pm.registerEvents(new CarePackageUse(), this);
+		pm.registerEvents(new HungerRefillCake(), this);
+		pm.registerEvents(new NetherstarHeal(), this);
+		pm.registerEvents(new RedstoneHealthBonus(), this);
+		
 	}
 
 	public static Plugin getPlugin()

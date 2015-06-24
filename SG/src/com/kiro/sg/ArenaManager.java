@@ -28,9 +28,9 @@ public class ArenaManager {
 		}
 	}
 	
-	public Arena getArena(String id) {
+	public Arena getArena(String arena2) {
 		for (Arena arena : arenas) {
-			if (arena.getID().equals(id)) {
+			if (arena.getID().equals(arena2)) {
 				return arena;
 			}
 		}
