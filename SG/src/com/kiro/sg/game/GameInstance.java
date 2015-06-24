@@ -132,12 +132,18 @@ public class GameInstance
 		PlayerInventory inv = player.getInventory();
 		for (ItemStack stack : inv.getContents())
 		{
-			world.dropItemNaturally(location, stack);
+			if (stack != null)
+			{
+				world.dropItemNaturally(location, stack);
+			}
 		}
 
 		for (ItemStack stack : inv.getArmorContents())
 		{
-			world.dropItemNaturally(location, stack);
+			if (stack != null)
+			{
+				world.dropItemNaturally(location, stack);
+			}
 		}
 	}
 
@@ -153,12 +159,18 @@ public class GameInstance
 			PlayerInventory inv = player.getInventory();
 			for (ItemStack stack : inv.getContents())
 			{
-				world.dropItemNaturally(location, stack);
+				if (stack != null)
+				{
+					world.dropItemNaturally(location, stack);
+				}
 			}
 
 			for (ItemStack stack : inv.getArmorContents())
 			{
-				world.dropItemNaturally(location, stack);
+				if (stack != null)
+				{
+					world.dropItemNaturally(location, stack);
+				}
 			}
 
 		}

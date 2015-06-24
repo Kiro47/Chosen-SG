@@ -36,7 +36,7 @@ public class SGMain extends JavaPlugin
 		pm.registerEvents(new EntityDamage(), this);
 		pm.registerEvents(new PlayerLeaveArena(), this);
 		pm.registerEvents(new PlayerMove(), this);
-		pm.registerEvents(new SignManager(), this);
+		//pm.registerEvents(new SignManager(), this);
 		pm.registerEvents(new Slowball(), this);
 		pm.registerEvents(new CrateListener(), this);
 
@@ -45,6 +45,7 @@ public class SGMain extends JavaPlugin
 
 		lobbyManager = new LobbyManager();
 
+		// delete unused worlds
 		File[] files = new File("./").listFiles();
 		for (File file : files)
 		{
