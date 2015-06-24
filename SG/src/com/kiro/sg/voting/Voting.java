@@ -99,7 +99,7 @@ public class Voting
 		VotingOption voteOption = selectedOptions.get(option);
 		voteOption.addVote();
 
-		if (player.hasMetadata("donor"))
+		if (player.hasPermission(Perms.DONOR_VOTES))
 		{
 			voteOption.addVote();
 		}

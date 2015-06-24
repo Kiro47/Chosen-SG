@@ -1,6 +1,7 @@
 package com.kiro.sg.voting;
 
 import com.kiro.sg.Config;
+import com.kiro.sg.lobby.LobbyManager;
 import com.kiro.sg.utils.Chat;
 import com.kiro.sg.utils.Msg;
 import org.bukkit.*;
@@ -108,10 +109,10 @@ public class VotingMap
 		{
 			ConfigurationSection mapValues = sec.getConfigurationSection(key);
 			Location[] locations = {
-					                       Config.getLocation(sec.getConfigurationSection("map1"), world),
-					                       Config.getLocation(sec.getConfigurationSection("map2"), world),
-					                       Config.getLocation(sec.getConfigurationSection("map3"), world),
-					                       Config.getLocation(sec.getConfigurationSection("map4"), world)
+					                       Config.getLocation(mapValues.getConfigurationSection("map1"), world),
+					                       Config.getLocation(mapValues.getConfigurationSection("map2"), world),
+					                       Config.getLocation(mapValues.getConfigurationSection("map3"), world),
+					                       Config.getLocation(mapValues.getConfigurationSection("map4"), world)
 			};
 
 			new VotingMap(locations);
@@ -130,10 +131,10 @@ public class VotingMap
 			config.set("world", locs[0].getWorld().getName());
 
 			ConfigurationSection sec = config.createSection("maps." + System.currentTimeMillis());
-			Config.saveLocation(sec.getConfigurationSection("map1"), locs[0]);
-			Config.saveLocation(sec.getConfigurationSection("map2"), locs[1]);
-			Config.saveLocation(sec.getConfigurationSection("map3"), locs[2]);
-			Config.saveLocation(sec.getConfigurationSection("map4"), locs[3]);
+			Config.saveLocation(sec.createSection("map1"), locs[0]);
+			Config.saveLocation(sec.createSection("map2"), locs[1]);
+			Config.saveLocation(sec.createSection("map3"), locs[2]);
+			Config.saveLocation(sec.createSection("map4"), locs[3]);
 
 			config.save(Config.VotingMapFile);
 
@@ -247,6 +248,7 @@ public class VotingMap
 			}
 			catch (Exception e)
 			{
+				e.printStackTrace();
 				prefix = "&0";
 			}
 
@@ -262,6 +264,7 @@ public class VotingMap
 
 	public void onClick(Player player)
 	{
+		LobbyManager.getInstance().addToQueue(player);
 		if (option != null)
 		{
 			Voting.voteFor(player, option.getOption());

@@ -1,6 +1,8 @@
-package com.kiro.sg.commands;
+package com.kiro.sg.commands.commands;
 
 import com.kiro.sg.arena.SGArena;
+import com.kiro.sg.commands.CommandInfo;
+import com.kiro.sg.commands.GameCommand;
 import com.kiro.sg.utils.Meta;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

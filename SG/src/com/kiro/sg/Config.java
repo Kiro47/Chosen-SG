@@ -8,7 +8,7 @@ import java.io.File;
 
 public final class Config
 {
-	public static final File ConfigFolder = new File("./plugin/SurvivalGames");
+	public static final File ConfigFolder = new File("./plugins/SurvivalGames");
 	public static final File LootConfigFile = new File(ConfigFolder, "loot.yml");
 
 	public static final File ArenaListFile = new File(ConfigFolder, "arenas.yml");
@@ -32,9 +32,9 @@ public final class Config
 
 	public static Location getLocation(ConfigurationSection config, World world)
 	{
-		double px = config.getInt("px") + 0.5;
-		double py = config.getInt("py") + 0.5;
-		double pz = config.getInt("pz") + 0.5;
+		double px = config.getInt("px");
+		double py = config.getInt("py");
+		double pz = config.getInt("pz");
 
 		return new Location(world, px, py, pz);
 	}
@@ -44,7 +44,6 @@ public final class Config
 		config.set("px", loc.getBlockX());
 		config.set("py", loc.getBlockY());
 		config.set("pz", loc.getBlockZ());
-
 	}
 
 }

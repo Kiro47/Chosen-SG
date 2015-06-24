@@ -5,6 +5,7 @@ import com.kiro.sg.SGMain;
 import com.kiro.sg.utils.Chat;
 import com.kiro.sg.utils.Msg;
 import org.bukkit.ChatColor;
+import org.bukkit.WorldBorder;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class GameRunner extends BukkitRunnable
@@ -17,7 +18,7 @@ public class GameRunner extends BukkitRunnable
 	public GameRunner(GameInstance instance)
 	{
 		gameInstance = instance;
-		timer = 5;
+		timer = 2;
 
 		runTaskTimer(SGMain.getPlugin(), 20, 20);
 	}
@@ -58,11 +59,21 @@ public class GameRunner extends BukkitRunnable
 			if (timer == 0)
 			{
 				// TODO: Add extra countdown timer thing (Maybe a boss bar?)
-				timer = Config.TIMER_STARTING_COUNTDOWN;
+				timer = Config.TIMER_GAME_MAX_TIME;
 				gameInstance.startMatch();
 			}
 			else
 			{
+				if (timer == 2)
+				{
+
+					WorldBorder border = gameInstance.getArena().getWorld().getWorldBorder();
+					border.setCenter(gameInstance.getArena().getCenterPoint());
+					border.setSize(2);
+					border.setDamageAmount(0.0);
+					border.setSize(500, 2);
+					border.setDamageBuffer(0);
+				}
 				// 20s, 10s, 5s-
 				if (timer == 20 || timer == 10 || timer <= 5)
 				{
@@ -75,7 +86,7 @@ public class GameRunner extends BukkitRunnable
 			if (timer == 0)
 			{
 				// TODO: Decrease time based on how many users died.
-				timer = Config.TIMER_GAME_MAX_TIME;
+				timer = Config.TIMER_DEATHMATCH_MAX;
 				gameInstance.deathmatch();
 			}
 			else
@@ -99,7 +110,6 @@ public class GameRunner extends BukkitRunnable
 		{
 			if (timer == 0)
 			{
-				timer = Config.TIMER_DEATHMATCH_MAX;
 				gameInstance.end();
 			}
 		}

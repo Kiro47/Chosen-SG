@@ -2,6 +2,7 @@ package com.kiro.sg.lobby;
 
 import com.kiro.sg.Config;
 import com.kiro.sg.SGMain;
+import com.kiro.sg.voting.Voting;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -36,7 +37,10 @@ public class GameCreationTimer extends BukkitRunnable
 	{
 		if (countdown == 0)
 		{
-			lobbyManager.createGame();
+			if (lobbyManager.createGame())
+			{
+				Voting.reset();
+			}
 			countdown = 120;
 		}
 		else if (countdown > 30 && lobbyManager.getQueueSize() > 20)

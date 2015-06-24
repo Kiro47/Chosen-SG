@@ -14,12 +14,19 @@ public class Meta
 
 	public static void removeMetadata(Player player, String key)
 	{
-		player.removeMetadata(key, SGMain.getPlugin());
+		if (has(player, key))
+		{
+			player.removeMetadata(key, SGMain.getPlugin());
+		}
 	}
 
 	public static Object getMetadata(Player player, String key)
 	{
-		return player.getMetadata(key);
+		if (has(player, key))
+		{
+			return player.getMetadata(key).get(0).value();
+		}
+		return null;
 	}
 
 	public static boolean has(Player player, String key)

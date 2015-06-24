@@ -31,7 +31,7 @@ public class PlayerLeaveArena implements Listener
 	{
 		handle(e.getPlayer());
 	}
-
+	
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e)

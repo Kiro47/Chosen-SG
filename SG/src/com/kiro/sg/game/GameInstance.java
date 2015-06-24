@@ -39,6 +39,11 @@ public class GameInstance
 		state = GameState.INIT;
 	}
 
+	public SGArena getArena()
+	{
+		return arena;
+	}
+
 	public void init()
 	{
 		gameRunner = new GameRunner(this);
@@ -49,6 +54,8 @@ public class GameInstance
 		{
 			preparePlayer(player);
 		}
+
+		scoreboard.updatePlayers(remaining.size());
 	}
 
 	public List<Player> getRemaining()
@@ -73,9 +80,10 @@ public class GameInstance
 
 	public void preparePlayer(Player player)
 	{
-		player.setGameMode(GameMode.ADVENTURE);
+		player.setGameMode(GameMode.SURVIVAL);
 		player.setMaxHealth(20.0);
 		player.setHealth(20.0);
+		player.setFoodLevel(20);
 		player.setAllowFlight(false);
 		player.setScoreboard(scoreboard.getScoreboard());
 		player.getInventory().clear();
@@ -96,7 +104,7 @@ public class GameInstance
 			player.showPlayer(p);
 		}
 
-		player.setGameMode(GameMode.SURVIVAL);
+		player.setGameMode(GameMode.ADVENTURE);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 2, 2));
 		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 2, 2));
 		scoreboard.setGhosts(player);
@@ -147,11 +155,13 @@ public class GameInstance
 
 	public void startMatch()
 	{
+		arena.getWorld().setTime(0);
 		setGameState(GameState.PLAYING);
 	}
 
 	public void deathmatch()
 	{
+		setGameState(GameState.DEATHMATCH);
 		Msg.msgGame(ChatColor.RED + "The Arena walls are caving in!", this, false);
 		WorldBorder border = arena.getWorld().getWorldBorder();
 		border.setDamageAmount(4.0);
@@ -162,19 +172,25 @@ public class GameInstance
 	{
 		setGameState(GameState.ENDING);
 		gameRunner.stop();
+
+		World mainWorld = Bukkit.getWorlds().get(0);
+
+		for (Player player : arena.getWorld().getPlayers())
+		{
+			player.teleport(mainWorld.getSpawnLocation());
+		}
+
+		arena.dispose();
+
 	}
 
 	public void start()
 	{
 		new TeleportTask(remaining, arena.getSpawns());
 		setGameState(GameState.STARTING);
+		arena.getWorld().setTime(15000);
 
 
-		WorldBorder border = arena.getWorld().getWorldBorder();
-		border.setCenter(arena.getCenterPoint());
-		border.setDamageAmount(0.0);
-		border.setSize(500, 10);
-		border.setDamageBuffer(0);
 	}
 
 }

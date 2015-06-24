@@ -12,7 +12,6 @@ public class EntityDamage implements Listener
 {
 
 	@EventHandler
-
 	public void onEntityDamage(EntityDamageEvent e)
 	{
 

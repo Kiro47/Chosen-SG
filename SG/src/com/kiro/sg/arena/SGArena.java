@@ -3,6 +3,7 @@ package com.kiro.sg.arena;
 import com.kiro.sg.Config;
 import com.kiro.sg.utils.CleanWorldGenerator;
 import com.kiro.sg.utils.FileUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -114,6 +115,18 @@ public class SGArena
 		}
 	}
 
+	public void dispose()
+	{
+		if (Bukkit.unloadWorld(getWorld(), false))
+		{
+			FileUtils.deleteFolder(getWorldInUseFolder());
+		}
+		else
+		{
+			System.out.println("Couldn't Unload World! " + world.getName());
+		}
+	}
+
 	/**
 	 * Loads the arena data as well as generates the world.
 	 */
@@ -135,18 +148,21 @@ public class SGArena
 			spawnPoints = new ArrayList<>(keys.size());
 			for (String key : keys)
 			{
-				Location loc = Config.getLocation(spawns.getConfigurationSection(key), world);
+				Location loc = Config.getLocation(spawns.getConfigurationSection(key), world).add(0.5, 0.5, 0.5);
 				spawnPoints.add(loc);
 			}
 
-			ConfigurationSection cornChestConfig = config.getConfigurationSection("cornChests");
-
-			keys = spawns.getKeys(false);
-			cornChests = new ArrayList<>(keys.size());
-			for (String key : keys)
+			if (config.contains("cornChests"))
 			{
-				Location loc = Config.getLocation(cornChestConfig.getConfigurationSection(key), world);
-				cornChests.add(loc);
+				ConfigurationSection cornChestConfig = config.getConfigurationSection("cornChests");
+
+				keys = cornChestConfig.getKeys(false);
+				cornChests = new ArrayList<>(keys.size());
+				for (String key : keys)
+				{
+					Location loc = Config.getLocation(cornChestConfig.getConfigurationSection(key), world);
+					cornChests.add(loc);
+				}
 			}
 
 		}
@@ -168,20 +184,20 @@ public class SGArena
 			config.set("arenaName", arenaName);
 			config.set("worldName", worldName);
 
-			Config.saveLocation(config.getConfigurationSection("center"), centerPoint);
+			Config.saveLocation(config.createSection("center"), centerPoint);
 
-			ConfigurationSection spawns = config.getConfigurationSection("spawns");
+			ConfigurationSection spawns = config.createSection("spawns");
 
 			for (int i = 0; i < spawnPoints.size(); i++)
 			{
-				Config.saveLocation(spawns.getConfigurationSection("s" + i), spawnPoints.get(i));
+				Config.saveLocation(spawns.createSection("s" + i), spawnPoints.get(i));
 			}
 
-			ConfigurationSection cornChestConfig = config.getConfigurationSection("cornChests");
+			ConfigurationSection cornChestConfig = config.createSection("cornChests");
 
-			for (int i = 0; i < spawnPoints.size(); i++)
+			for (int i = 0; i < cornChests.size(); i++)
 			{
-				Config.saveLocation(cornChestConfig.getConfigurationSection("s" + i), cornChests.get(i));
+				Config.saveLocation(cornChestConfig.createSection("s" + i), cornChests.get(i));
 			}
 
 			config.save(getArenaFileLocation());
@@ -219,7 +235,7 @@ public class SGArena
 	 */
 	private File getArenaFileLocation()
 	{
-		return new File(Config.ArenaConfigFolder, COMPILE.matcher(arenaName).replaceAll("_"));
+		return new File(Config.ArenaConfigFolder, COMPILE.matcher(arenaName).replaceAll("_") + ".yml");
 	}
 
 	/**

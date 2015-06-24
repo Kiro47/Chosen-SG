@@ -1,9 +1,13 @@
 package com.kiro.sg.lobby;
 
 import com.kiro.sg.Config;
+import com.kiro.sg.arena.SGArena;
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.game.GameManager;
+import com.kiro.sg.utils.Msg;
 import com.kiro.sg.utils.Perms;
+import com.kiro.sg.voting.Voting;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -16,7 +20,7 @@ import java.util.List;
 public class LobbyManager
 {
 
-	public static LobbyManager instance;
+	private static LobbyManager instance;
 
 	public static LobbyManager getInstance()
 	{
@@ -29,6 +33,7 @@ public class LobbyManager
 	public LobbyManager()
 	{
 		instance = this;
+		Voting.reset();
 		playerQueue = new LinkedList<>();
 		new GameCreationTimer(this);
 	}
@@ -40,20 +45,28 @@ public class LobbyManager
 	 */
 	public int addToQueue(Player player)
 	{
-		if (player.hasPermission(Perms.DONOR_QUEUE))
+		if (!playerQueue.contains(player))
 		{
-			// Donors will fill every OTHER slot in the queue to give normal players a chance to get into a game.
-			int index = Math.min(donorCount * 2, playerQueue.size());
-			playerQueue.add(index, player);
-			donorCount++;
+			int index;
+			//		Meta.setMetadata(player, "lobby", true);
+			if (player.hasPermission(Perms.DONOR_QUEUE))
+			{
+				// Donors will fill every OTHER slot in the queue to give normal players a chance to get into a game.
+				index = Math.min(donorCount * 2, playerQueue.size());
+				playerQueue.add(index, player);
+				donorCount++;
 
-			return index + 1;
+				index += 1;
+			}
+			else
+			{
+				playerQueue.add(player);
+				index = playerQueue.size();
+			}
+
+			Msg.msgPlayer(player, ChatColor.AQUA + "You have been added to the queue! (" + index + ") ");
 		}
-		else
-		{
-			playerQueue.add(player);
-			return playerQueue.size();
-		}
+		return -1;
 	}
 
 	/**
@@ -61,6 +74,7 @@ public class LobbyManager
 	 */
 	public void removeFromQueue(Player player)
 	{
+		//		Meta.removeMetadata(player, "lobby");
 		if (player.hasPermission(Perms.DONOR_QUEUE))
 		{
 			donorCount--;
@@ -101,20 +115,24 @@ public class LobbyManager
 			while (players.size() < count)
 			{
 				Player player = playerQueue.poll();
-				if (player.hasPermission(Perms.DONOR_QUEUE))
-				{
-					donorCount--;
-				}
 
 				if (player != null)
 				{
+					if (player.hasPermission(Perms.DONOR_QUEUE))
+					{
+						donorCount--;
+					}
+
 					players.add(player);
+					//Meta.removeMetadata(player, "lobby");
 				}
 
 				flag = !flag;
 			}
-			// TODO: Add Voting to load arena.
-			GameInstance gameInstance = new GameInstance(players, null);
+
+			SGArena arena = Voting.getMostVotes().getValue();
+
+			GameInstance gameInstance = new GameInstance(players, arena);
 			GameManager.registerGame(gameInstance);
 
 			gameInstance.init();

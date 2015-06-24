@@ -1,20 +1,22 @@
 package com.kiro.sg;
 
 import com.kiro.sg.arena.ArenaManager;
+import com.kiro.sg.commands.CommandManager;
 import com.kiro.sg.crates.CrateUtils;
-import com.kiro.sg.listeners.EntityDamage;
-import com.kiro.sg.listeners.PlayerLeaveArena;
-import com.kiro.sg.listeners.PlayerMove;
-import com.kiro.sg.listeners.SignManager;
+import com.kiro.sg.listeners.*;
 import com.kiro.sg.listeners.items.InteractmentItems;
 import com.kiro.sg.listeners.items.Slowball;
 import com.kiro.sg.lobby.LobbyManager;
+import com.kiro.sg.utils.FileUtils;
+import com.kiro.sg.voting.VotingMap;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 public class SGMain extends JavaPlugin
 {
@@ -24,7 +26,6 @@ public class SGMain extends JavaPlugin
 	public void onEnable()
 	{
 		instance = this;
-		ArenaManager.getInstance().init();
 
 		CrateUtils.loadLoots();
 
@@ -32,6 +33,7 @@ public class SGMain extends JavaPlugin
 
 		PluginManager pm = Bukkit.getServer().getPluginManager();
 
+		pm.registerEvents(new LobbyListener(), this);
 		pm.registerEvents(new EntityDamage(), this);
 		pm.registerEvents(new PlayerLeaveArena(), this);
 		pm.registerEvents(new PlayerMove(), this);
@@ -39,8 +41,19 @@ public class SGMain extends JavaPlugin
 		pm.registerEvents(new InteractmentItems(), this);
 		pm.registerEvents(new Slowball(), this);
 
+		ArenaManager.getInstance().init();
+		VotingMap.loadMaps();
+
 		lobbyManager = new LobbyManager();
 
+		File[] files = new File("./").listFiles();
+		for (File file : files)
+		{
+			if (file.getName().contains("_map_"))
+			{
+				FileUtils.deleteFolder(file);
+			}
+		}
 
 	}
 
