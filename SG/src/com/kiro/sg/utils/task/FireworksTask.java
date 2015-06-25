@@ -13,12 +13,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class FireworksTask extends BukkitRunnable
 {
 
-	private Player player;
+	private final Player player;
 	private int count;
 
 	public FireworksTask(Player player)
 	{
-		count = 20;
+		this.player = player;
+		count = 19;
 
 		runTaskTimer(SGMain.getPlugin(), 10, 10);
 	}
@@ -26,7 +27,7 @@ public class FireworksTask extends BukkitRunnable
 	@Override
 	public void run()
 	{
-		if (count-- == 0 || player == null || !player.isOnline())
+		if (count-- == 0 || !player.isOnline())
 		{
 			cancel();
 		}
@@ -38,7 +39,7 @@ public class FireworksTask extends BukkitRunnable
 			//meta.addEffect();
 			FireworkEffect.Builder builder = FireworkEffect.builder();
 			builder.with(FireworkEffect.Type.values()[(int) (Math.random() * FireworkEffect.Type.values().length)]);
-			int c = (int) (Math.random() * 3);
+			int c = (int) (Math.random() * 3) + 1;
 			for (int i = 0; i < c; i++)
 			{
 				builder.withColor(Color.fromRGB((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
@@ -56,7 +57,7 @@ public class FireworksTask extends BukkitRunnable
 			meta.setPower((int) (Math.random() * 2));
 
 			fw.setFireworkMeta(meta);
-			
+
 		}
 	}
 

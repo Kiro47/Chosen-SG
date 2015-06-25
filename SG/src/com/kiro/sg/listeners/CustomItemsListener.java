@@ -24,8 +24,10 @@ public class CustomItemsListener implements Listener
 				CustomItem item = CustomItem.checkForItem(stack);
 				if (item != null)
 				{
-					item.useItem(event.getPlayer(), event.getAction(), event.getClickedBlock(), event.getBlockFace());
-					event.setCancelled(true);
+					if (item.useItem(event.getPlayer(), event.getAction(), event.getClickedBlock(), event.getBlockFace()))
+					{
+						event.setCancelled(true);
+					}
 				}
 			}
 		}

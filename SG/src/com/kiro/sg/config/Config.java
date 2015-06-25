@@ -18,7 +18,7 @@ public final class Config
 	public static final File ArenaWorldFolder = new File(ConfigFolder, "/maps/");
 	public static final File ArenaImagesFolder = new File(ConfigFolder, "/images/");
 
-	public static int MIN_PLAYER_COUNT = 6; // 1 for testing
+	public static int MIN_PLAYER_COUNT = 1; // 1 for testing
 	public static int MAX_PLAYER_COUNT = 24;
 
 	public static int TIMER_STARTING_COUNTDOWN = 25; // 25 seconds

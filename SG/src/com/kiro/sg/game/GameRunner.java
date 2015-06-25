@@ -1,11 +1,15 @@
 package com.kiro.sg.game;
 
-import com.kiro.sg.config.Config;
 import com.kiro.sg.SGMain;
+import com.kiro.sg.config.Config;
+import com.kiro.sg.game.arena.SGArena;
 import com.kiro.sg.utils.chat.Chat;
 import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.WorldBorder;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class GameRunner extends BukkitRunnable
@@ -14,11 +18,13 @@ public class GameRunner extends BukkitRunnable
 	private final GameInstance gameInstance;
 	private int timer;
 	private int chestRefillTimer;
+	private int dayNightDriver;
 
 	public GameRunner(GameInstance instance)
 	{
 		gameInstance = instance;
 		timer = 1;
+		dayNightDriver = 0;
 
 		runTaskTimer(SGMain.getPlugin(), 20, 20);
 	}
@@ -36,6 +42,13 @@ public class GameRunner extends BukkitRunnable
 	@Override
 	public void run()
 	{
+		dayNightDriver += 80;
+		if (dayNightDriver >= 24000)
+		{
+			dayNightDriver = 0;
+		}
+		gameInstance.getArena().getWorld().setTime(dayNightDriver);
+
 		timer--;
 		gameInstance.getScoreboard().updateTimer(timer);
 
@@ -48,7 +61,7 @@ public class GameRunner extends BukkitRunnable
 		}
 		if (gameInstance.getState() == GameState.INIT)
 		{
-			if (timer == 0)
+			if (timer <= 0)
 			{
 				timer = Config.TIMER_STARTING_COUNTDOWN;
 				gameInstance.start();
@@ -56,41 +69,51 @@ public class GameRunner extends BukkitRunnable
 		}
 		else if (gameInstance.getState() == GameState.STARTING)
 		{
-			if (timer == 0)
+			if (timer <= 0)
 			{
 				// TODO: Add extra countdown timer thing (Maybe a boss bar?)
 				timer = Config.TIMER_GAME_MAX_TIME;
 				gameInstance.startMatch();
+
+				WorldBorder border = gameInstance.getArena().getWorld().getWorldBorder();
+				border.setCenter(gameInstance.getArena().getCenterPoint());
+				border.setSize(2);
+				border.setDamageAmount(0.0);
+				border.setSize(800, 2);
+				border.setDamageBuffer(0);
 			}
 			else
 			{
-				if (timer == 1)
-				{
 
-					WorldBorder border = gameInstance.getArena().getWorld().getWorldBorder();
-					border.setCenter(gameInstance.getArena().getCenterPoint());
-					border.setSize(2);
-					border.setDamageAmount(0.0);
-					border.setSize(800, 2);
-					border.setDamageBuffer(0);
-				}
 				// 20s, 10s, 5s-
 				if (timer == 20 || timer == 10 || timer <= 5)
 				{
 					Msg.msgGame(Chat.format("&c" + timer + " seconds till start!"), gameInstance, false);
+					SGArena arena = gameInstance.getArena();
+					World world = arena.getWorld();
+					for (Player player : world.getPlayers())
+					{
+						player.playSound(player.getLocation(), Sound.NOTE_PLING, 1f, 1f);
+					}
 				}
 			}
 		}
 		else if (gameInstance.getState() == GameState.PLAYING)
 		{
-			if (timer == 0)
+			if (timer <= 0)
 			{
-				// TODO: Decrease time based on how many users died.
 				timer = Config.TIMER_DEATHMATCH_MAX;
 				gameInstance.deathmatch();
 			}
 			else
 			{
+				if (timer == Config.TIMER_GAME_MAX_TIME - 1)
+				{
+					for (Player player : gameInstance.getRemaining())
+					{
+						player.setHealth(20.0);
+					}
+				}
 				// 15m, 10m, 5m, 1m, 30s, 10s, 5s-
 				if (timer == 60)
 				{
@@ -108,7 +131,7 @@ public class GameRunner extends BukkitRunnable
 		}
 		else if (gameInstance.getState() == GameState.DEATHMATCH)
 		{
-			if (timer == 0)
+			if (timer <= 0)
 			{
 				gameInstance.ending();
 				timer = 5;
@@ -132,7 +155,7 @@ public class GameRunner extends BukkitRunnable
 		}
 		else if (gameInstance.getState() == GameState.ENDING)
 		{
-			if (timer == 0)
+			if (timer <= 0)
 			{
 				gameInstance.end();
 			}

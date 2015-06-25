@@ -25,7 +25,7 @@ public class ItemNetherstar extends CustomItem
 	}
 
 	@Override
-	public void useItem(Player owner, Action action, Block block, BlockFace face)
+	public boolean useItem(Player owner, Action action, Block block, BlockFace face)
 	{
 		ItemUtils.removeHeldItem(owner);
 		double max = owner.getMaxHealth();
@@ -35,5 +35,6 @@ public class ItemNetherstar extends CustomItem
 		//owner.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10, 1));
 
 		Msg.msgPlayer(owner, ChatColor.GREEN + "Some of your health has been restored!");
+		return true;
 	}
 }

@@ -3,6 +3,7 @@ package com.kiro.sg.listeners;
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.game.GameManager;
 import com.kiro.sg.game.crates.SupplyCrate;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -28,19 +29,22 @@ public class CrateListener implements Listener
 			if (type == Material.CHEST || type == Material.TRAPPED_CHEST || type == Material.ENDER_CHEST)
 			{
 				Player player = event.getPlayer();
-				GameInstance game = GameManager.getInstance(player);
-				if (game != null)
+				if (player.getGameMode() == GameMode.SURVIVAL)
+				{
+					GameInstance game = GameManager.getInstance(player);
+					if (game != null)
+					{
+						event.setCancelled(true);
+						SupplyCrate crate = game.getCrates().getCrate(block.getLocation());
+						crate.open(player);
+
+						World world = player.getWorld();
+						world.playSound(block.getLocation(), Sound.CHEST_OPEN, 1.0f, 1.0f);
+					}
+				}
+				else
 				{
 					event.setCancelled(true);
-					SupplyCrate crate = game.getCrates().getCrate(block.getLocation());
-					if (type == Material.ENDER_CHEST)
-					{
-						crate.populate(3);
-					}
-					crate.open(player);
-
-					World world = player.getWorld();
-					world.playSound(block.getLocation(), Sound.CHEST_OPEN, 1.0f, 1.0f);
 				}
 			}
 		}
@@ -50,10 +54,13 @@ public class CrateListener implements Listener
 	public void onInventoryClose(InventoryCloseEvent event)
 	{
 		Inventory inventory = event.getInventory();
-		if (inventory.getViewers().size() == 1 || inventory.getSize() == 9)
+		if ("Supply Crate".equals(inventory.getTitle()))
 		{
-			World world = event.getPlayer().getWorld();
-			world.playSound(event.getPlayer().getLocation(), Sound.CHEST_CLOSE, 1.0f, 1.0f);
+			if (inventory.getViewers().size() == 1 || inventory.getSize() == 9)
+			{
+				World world = event.getPlayer().getWorld();
+				world.playSound(event.getPlayer().getLocation(), Sound.CHEST_CLOSE, 1.0f, 1.0f);
+			}
 		}
 	}
 

@@ -13,19 +13,26 @@ public class TemporaryBlockTask extends BukkitRunnable
 
 	private final Location location;
 	private final Material material;
+	private final Material newType;
 	private final MaterialData data;
+	private final int ticks;
 
 	public TemporaryBlockTask(Block block, int ticks, Material material)
 	{
+		newType = material;
 		this.location = block.getLocation();
-
+		this.ticks = ticks;
 		BlockState state = block.getState();
 
 		this.material = block.getType();
 		data = state.getData();
 
-		block.setType(material);
 
+	}
+
+	public void exe()
+	{
+		location.getBlock().setType(newType);
 		runTaskLater(SGMain.getPlugin(), ticks);
 	}
 
@@ -36,6 +43,8 @@ public class TemporaryBlockTask extends BukkitRunnable
 
 	public TemporaryBlockTask(Location location, int ticks, Material material)
 	{
+		newType = material;
+		this.ticks = ticks;
 		this.location = location;
 
 		Block block = location.getBlock();
@@ -44,9 +53,8 @@ public class TemporaryBlockTask extends BukkitRunnable
 		this.material = block.getType();
 		data = state.getData();
 
-		block.setType(material);
 
-		runTaskLater(SGMain.getPlugin(), ticks);
+		//runTaskLater(SGMain.getPlugin(), ticks);
 	}
 
 	@Override

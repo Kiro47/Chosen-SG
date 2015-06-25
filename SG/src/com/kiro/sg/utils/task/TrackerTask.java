@@ -1,19 +1,9 @@
 package com.kiro.sg.utils.task;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 //import net.minecraft.server.v1_8_R3.ChatSerializer;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import com.kiro.sg.listeners.items.CompassTracker;
 
 public class TrackerTask extends BukkitRunnable {
 	

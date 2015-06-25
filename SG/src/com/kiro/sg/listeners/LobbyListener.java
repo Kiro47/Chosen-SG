@@ -54,7 +54,10 @@ public class LobbyListener implements Listener
 	{
 		if (event.getDamager().getType() == EntityType.PLAYER)
 		{
-			event.setCancelled(interact(event.getEntity(), (Player) event.getDamager()));
+			if (interact(event.getEntity(), (Player) event.getDamager()))
+			{
+				event.setCancelled(true);
+			}
 		}
 
 	}
@@ -62,7 +65,10 @@ public class LobbyListener implements Listener
 	@EventHandler
 	public void onEntityInteract(PlayerInteractEntityEvent event)
 	{
-		event.setCancelled(interact(event.getRightClicked(), event.getPlayer()));
+		if (interact(event.getRightClicked(), event.getPlayer()))
+		{
+			event.setCancelled(true);
+		}
 	}
 
 	@EventHandler
@@ -95,9 +101,9 @@ public class LobbyListener implements Listener
 				if (map != null)
 				{
 					map.onClick(player);
+					return true;
 				}
 			}
-			return true;
 		}
 		return false;
 	}

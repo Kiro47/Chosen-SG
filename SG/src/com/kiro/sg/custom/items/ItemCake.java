@@ -25,11 +25,12 @@ public class ItemCake extends CustomItem
 	}
 
 	@Override
-	public void useItem(Player owner, Action action, Block block, BlockFace face)
+	public boolean useItem(Player owner, Action action, Block block, BlockFace face)
 	{
 		owner.setFoodLevel(20);
 		ItemUtils.removeHeldItem(owner);
 
 		Msg.msgPlayer(owner, ChatColor.GREEN + "Your hunger has been refilled!");
+		return true;
 	}
 }

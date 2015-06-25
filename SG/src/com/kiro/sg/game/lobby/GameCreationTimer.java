@@ -1,7 +1,8 @@
 package com.kiro.sg.game.lobby;
 
-import com.kiro.sg.config.Config;
 import com.kiro.sg.SGMain;
+import com.kiro.sg.config.Config;
+import com.kiro.sg.scoreboard.LobbyScoreboard;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -14,10 +15,12 @@ public class GameCreationTimer extends BukkitRunnable
 
 	private final LobbyManager lobbyManager;
 	private int countdown;
+	private final LobbyScoreboard scoreboard;
 
 	public GameCreationTimer(LobbyManager lobbyManager)
 	{
 		this.lobbyManager = lobbyManager;
+		scoreboard = new LobbyScoreboard();
 		runTaskTimer(SGMain.getPlugin(), 20, 20);
 	}
 
@@ -34,6 +37,8 @@ public class GameCreationTimer extends BukkitRunnable
 	@Override
 	public void run()
 	{
+		scoreboard.updatePlayers(lobbyManager.getQueueSize());
+		scoreboard.updateTimer(countdown);
 		if (countdown == 0)
 		{
 			if (lobbyManager.createGame())

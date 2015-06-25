@@ -5,6 +5,7 @@ import com.kiro.sg.game.arena.ArenaManager;
 import com.kiro.sg.game.crates.CrateUtils;
 import com.kiro.sg.game.lobby.LobbyManager;
 import com.kiro.sg.listeners.*;
+import com.kiro.sg.utils.chat.Chat;
 import com.kiro.sg.utils.misc.FileUtils;
 import com.kiro.sg.voting.VotingMap;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
@@ -26,6 +27,7 @@ public class SGMain extends JavaPlugin
 		instance = this;
 
 		CrateUtils.loadLoots();
+		Chat.init();
 
 		getCommand("survivalgames").setExecutor(new CommandManager());
 

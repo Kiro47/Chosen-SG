@@ -26,6 +26,7 @@ public abstract class CustomItem
 		ITEMS.add(new ItemNetherstar());
 		ITEMS.add(new ItemCarePackage());
 		ITEMS.add(new ItemSlowball());
+		ITEMS.add(new ItemCompass());
 	}
 
 	public static CustomItem checkForItem(ItemStack stack)
@@ -44,7 +45,7 @@ public abstract class CustomItem
 
 	public abstract String itemName();
 
-	public abstract void useItem(Player owner, Action action, Block block, BlockFace face);
+	public abstract boolean useItem(Player owner, Action action, Block block, BlockFace face);
 
 	public void useItemOnPlayer(Player owner, Player on)
 	{

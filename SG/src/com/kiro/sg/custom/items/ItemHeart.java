@@ -26,7 +26,7 @@ public class ItemHeart extends CustomItem
 	}
 
 	@Override
-	public void useItem(Player owner, Action action, Block block, BlockFace face)
+	public boolean useItem(Player owner, Action action, Block block, BlockFace face)
 	{
 		if (EventUtils.isRightClick(action))
 		{
@@ -35,5 +35,6 @@ public class ItemHeart extends CustomItem
 
 			Msg.msgPlayer(owner, ChatColor.GREEN + "Your health has been increased by a heart!");
 		}
+		return true;
 	}
 }

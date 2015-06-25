@@ -24,6 +24,8 @@ public class ParticleSpiralTask extends BukkitRunnable
 	private float angle;
 	private double py;
 
+	private Runnable exe;
+
 
 	public ParticleSpiralTask(Entity entity, int time, int split, double wrapps, int height, int points, double radius, ParticleEffects.ParticleType effect)
 	{
@@ -42,8 +44,14 @@ public class ParticleSpiralTask extends BukkitRunnable
 		height_shift = height / (points * wrapps);
 		angleOffsetSplit = POINTS_IN_CIRCLE / this.split;
 
-		runTaskTimer(SGMain.getPlugin(), 1, 1);
 
+		runTaskTimer(SGMain.getPlugin(), 0, 1);
+
+	}
+
+	public void executeAfter(Runnable runnable)
+	{
+		exe = runnable;
 	}
 
 	public ParticleSpiralTask(Location location, int time, int split, double wrapps, int height, int points, double radius, ParticleEffects.ParticleType effect)
@@ -63,9 +71,10 @@ public class ParticleSpiralTask extends BukkitRunnable
 		height_shift = height / (points * wrapps);
 		angleOffsetSplit = POINTS_IN_CIRCLE / this.split;
 
-		runTaskTimer(SGMain.getPlugin(), 1, 1);
+		runTaskTimer(SGMain.getPlugin(), 0, 1);
 
 	}
+
 
 	@Override
 	public void run()
@@ -83,6 +92,10 @@ public class ParticleSpiralTask extends BukkitRunnable
 		if (ticks++ == time)
 		{
 			cancel();
+			if (exe != null)
+			{
+				exe.run();
+			}
 		}
 
 		for (int i = 0; i < amount_per_tick; i++)

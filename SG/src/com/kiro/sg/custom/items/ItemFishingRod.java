@@ -25,10 +25,11 @@ public class ItemFishingRod extends CustomItem
 	}
 
 	@Override
-	public void useItem(Player owner, Action action, Block block, BlockFace face)
+	public boolean useItem(Player owner, Action action, Block block, BlockFace face)
 	{
-		ItemStack stack = ItemUtils.diminishUsages(owner.getItemInHand(), 0.1f);
+		ItemStack stack = ItemUtils.diminishUsages(owner.getItemInHand(), 0.02f);
 		owner.setItemInHand(stack);
+		return false;
 	}
 
 	@Override
@@ -38,7 +39,9 @@ public class ItemFishingRod extends CustomItem
 		Vector vec2 = on.getLocation().toVector();
 
 		Vector vector = vec1.subtract(vec2);
-		vector.setY(0.4);
+
+		vector.normalize().multiply(new Vector(2, 0, 2));
+		vector.setY(vector.getY() + 0.1);
 
 		on.setVelocity(vector);
 	}
