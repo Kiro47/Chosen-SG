@@ -7,8 +7,8 @@ import com.kiro.sg.utils.Meta;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-@CommandInfo(description = "Saves the arena!", usage = "<arenaName>", aliases = {"savearena", "sa"}, op = true)
-public class SaveArena extends GameCommand
+@CommandInfo(description = "Closes the arena (to stop defining) !", usage = "", aliases = {"closearena", "close"}, op = true)
+public class CloseArena extends GameCommand
 {
 	@Override
 	public void onCommand(Player p, String[] args)
@@ -16,14 +16,14 @@ public class SaveArena extends GameCommand
 
 		if (!Meta.has(p, "defineArena"))
 		{
-			p.sendMessage(ChatColor.RED + "You have to define an arena first! /createarena <world name> <arena name>");
+			p.sendMessage(ChatColor.RED + "You don't have an arena to close");
 			return;
 		}
 
-		SGArena arena = (SGArena) Meta.getMetadata(p, "defineArena");
-		arena.saveArena();
 
+		SGArena arena = (SGArena) Meta.getMetadata(p, "defineArena");
 		arena.dispose();
+
 		Meta.removeMetadata(p, "defineArena");
 	}
 }

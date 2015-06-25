@@ -110,23 +110,31 @@ public class GameRunner extends BukkitRunnable
 		{
 			if (timer == 0)
 			{
-				gameInstance.end();
+				gameInstance.ending();
+				timer = 10;
+			}
+			else
+			{
+				// 15m, 10m, 5m, 1m, 30s, 10s, 5s-
+				if (timer == 60)
+				{
+					Msg.msgGame(Chat.format("&c1 minute remaining!"), gameInstance, false);
+				}
+				else if (timer == 300 || timer == 240 || timer == 180 || timer == 120)
+				{
+					Msg.msgGame(Chat.format("&c" + timer / 60 + " minutes remaining!"), gameInstance, false);
+				}
+				else if (timer == 30 || timer == 10 || timer <= 5)
+				{
+					Msg.msgGame(Chat.format("&c" + timer + " seconds remaining!"), gameInstance, false);
+				}
 			}
 		}
-		else
+		else if (gameInstance.getState() == GameState.ENDING)
 		{
-			// 15m, 10m, 5m, 1m, 30s, 10s, 5s-
-			if (timer == 60)
+			if (timer == 0)
 			{
-				Msg.msgGame(Chat.format("&c1 minute remaining!"), gameInstance, false);
-			}
-			else if (timer == 300 || timer == 240 || timer == 180 || timer == 120)
-			{
-				Msg.msgGame(Chat.format("&c" + timer / 60 + " minutes remaining!"), gameInstance, false);
-			}
-			else if (timer == 30 || timer == 10 || timer <= 5)
-			{
-				Msg.msgGame(Chat.format("&c" + timer + " seconds remaining!"), gameInstance, false);
+				gameInstance.end();
 			}
 		}
 

@@ -5,7 +5,7 @@ import com.kiro.sg.commands.CommandInfo;
 import com.kiro.sg.commands.GameCommand;
 import com.kiro.sg.utils.Meta;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -37,8 +37,9 @@ public class CreateArena extends GameCommand
 		arena.createWorld();
 
 		World world = arena.getWorld();
-		Location location = new Location(world, 0, 200, 0);
-		p.teleport(location);
+		p.setGameMode(GameMode.CREATIVE);
+		p.setFlying(true);
+		p.teleport(world.getSpawnLocation());
 
 		Meta.setMetadata(p, "defineArena", arena);
 

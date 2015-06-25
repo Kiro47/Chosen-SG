@@ -22,8 +22,6 @@ public class PlayerLeaveArena implements Listener
 		{
 			instance.setSpectator(e.getPlayer());
 		}
-		//		handle(e.getPlayer());
-		//		e.setRespawnLocation(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
 	}
 
 	@EventHandler

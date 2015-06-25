@@ -3,9 +3,12 @@ package com.kiro.sg.game;
 import com.kiro.sg.arena.SGArena;
 import com.kiro.sg.crates.Crates;
 import com.kiro.sg.scoreboard.GameScoreboard;
+import com.kiro.sg.utils.Chat;
+import com.kiro.sg.utils.DamageTracker;
 import com.kiro.sg.utils.Meta;
 import com.kiro.sg.utils.Msg;
-import com.kiro.sg.utils.TeleportTask;
+import com.kiro.sg.utils.task.FireworksTask;
+import com.kiro.sg.utils.task.TeleportTask;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -124,6 +127,14 @@ public class GameInstance
 	{
 		setSpectator(player);
 
+		Player killer = DamageTracker.get(player);
+		if (killer != null)
+		{
+			Msg.msgGame(Chat.format(String.format("&c%s &ehas been killed by &c%s", player.getDisplayName(), killer.getDisplayName())), this, false);
+		}
+
+		DamageTracker.remove(player);
+
 
 		World world = player.getWorld();
 		Location location = player.getLocation();
@@ -145,35 +156,35 @@ public class GameInstance
 				world.dropItemNaturally(location, stack);
 			}
 		}
+
+		inv.clear();
+
+		if (remaining.size() == 1)
+		{
+			Player winner = remaining.get(0);
+			Msg.msgGame(ChatColor.GREEN + winner.getDisplayName() + ChatColor.AQUA + " has won the game!", this, false);
+
+			new FireworksTask(winner);
+			ending();
+		}
+		else if (remaining.isEmpty())
+		{
+			end();
+		}
+
 	}
 
 	public void removePlayer(Player player)
 	{
-		Meta.removeMetadata(player, "game");
 		if (player.getGameMode() == GameMode.SURVIVAL)
 		{
-			World world = player.getWorld();
-			Location location = player.getLocation();
-			world.strikeLightningEffect(location);
-
-			PlayerInventory inv = player.getInventory();
-			for (ItemStack stack : inv.getContents())
-			{
-				if (stack != null)
-				{
-					world.dropItemNaturally(location, stack);
-				}
-			}
-
-			for (ItemStack stack : inv.getArmorContents())
-			{
-				if (stack != null)
-				{
-					world.dropItemNaturally(location, stack);
-				}
-			}
-
+			playerDeath(player);
 		}
+		Meta.removeMetadata(player, "game");
+
+		World mainWorld = Bukkit.getWorlds().get(0);
+		player.teleport(mainWorld.getSpawnLocation());
+		player.getInventory().clear();
 	}
 
 	public Crates getCrates()
@@ -206,16 +217,19 @@ public class GameInstance
 		border.setSize(60, 90);
 	}
 
-	public void end()
+	public void ending()
 	{
 		setGameState(GameState.ENDING);
-		gameRunner.stop();
+		gameRunner.setTimer(10);
+	}
 
-		World mainWorld = Bukkit.getWorlds().get(0);
+	public void end()
+	{
+		gameRunner.stop();
 
 		for (Player player : arena.getWorld().getPlayers())
 		{
-			player.teleport(mainWorld.getSpawnLocation());
+			removePlayer(player);
 		}
 
 		arena.dispose();

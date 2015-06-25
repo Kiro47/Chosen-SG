@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -117,6 +118,11 @@ public class SGArena
 
 	public void dispose()
 	{
+		Location location = Bukkit.getWorlds().get(0).getSpawnLocation();
+		for (Player player : world.getPlayers())
+		{
+			player.teleport(location);
+		}
 		if (Bukkit.unloadWorld(getWorld(), false))
 		{
 			FileUtils.deleteFolder(getWorldInUseFolder());

@@ -30,6 +30,7 @@ public class CommandManager implements CommandExecutor
 		cmds.add(new SaveArena());
 		cmds.add(new AddVoteMap());
 		cmds.add(new SetCenter());
+		cmds.add(new CloseArena());
 	}
 
 	@Override
