@@ -12,7 +12,8 @@ public class SettingsManager {
 	private static final SettingsManager
 			configuration = new SettingsManager("config"),
 			arenas = new SettingsManager("arenas"),
-			signs = new SettingsManager("signs")
+			signs = new SettingsManager("signs"),
+			bcConfig = new SettingsManager("broadcastConfig")
 	;
 	
 	public static SettingsManager getConfig() {
@@ -26,9 +27,15 @@ public class SettingsManager {
 	public static SettingsManager getSigns() {
 		return signs;
 	}
+	
+	public static SettingsManager getBroadcastConfig() {
+		return bcConfig;
+	}
+	
 
 	private File file;
 	private FileConfiguration config;
+	
 	
 	private SettingsManager(String fileName) {
 		if (!SGMain.getPlugin().getDataFolder().exists()) {
@@ -44,8 +51,6 @@ public class SettingsManager {
 				e.printStackTrace();
 			}
 		}
-		
-		config = YamlConfiguration.loadConfiguration(file);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -80,5 +85,9 @@ public class SettingsManager {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void reloadFile() {
+		config = YamlConfiguration.loadConfiguration(file);
 	}
 }
