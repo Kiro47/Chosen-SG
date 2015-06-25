@@ -28,6 +28,7 @@ public class LobbyManager
 	}
 
 	private final LinkedList<Player> playerQueue;
+	private final List<Player> donorsWaiting;
 	private int donorCount = 0;
 
 	public LobbyManager()
@@ -35,6 +36,7 @@ public class LobbyManager
 		instance = this;
 		Voting.reset();
 		playerQueue = new LinkedList<>();
+		donorsWaiting = new ArrayList<>();
 		new GameCreationTimer(this);
 	}
 
@@ -51,8 +53,13 @@ public class LobbyManager
 			//		Meta.setMetadata(player, "lobby", true);
 			if (player.hasPermission(Perms.DONOR_QUEUE))
 			{
+				if (!donorsWaiting.contains(player))
+				{
+					donorsWaiting.add(player);
+				}
+
 				// Donors will fill every OTHER slot in the queue to give normal players a chance to get into a game.
-				index = Math.min(donorCount * 2, playerQueue.size());
+				index = Math.min(donorsWaiting.size() * 2, playerQueue.size());
 				playerQueue.add(index, player);
 				donorCount++;
 
@@ -77,7 +84,7 @@ public class LobbyManager
 		//		Meta.removeMetadata(player, "lobby");
 		if (player.hasPermission(Perms.DONOR_QUEUE))
 		{
-			donorCount--;
+			donorsWaiting.remove(player);
 		}
 		playerQueue.remove(player);
 	}
@@ -136,6 +143,7 @@ public class LobbyManager
 			GameManager.registerGame(gameInstance);
 
 			gameInstance.init();
+			Voting.reset();
 
 			return true;
 		}

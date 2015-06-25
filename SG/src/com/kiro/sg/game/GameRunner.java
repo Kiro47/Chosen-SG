@@ -64,14 +64,14 @@ public class GameRunner extends BukkitRunnable
 			}
 			else
 			{
-				if (timer == 2)
+				if (timer == 1)
 				{
 
 					WorldBorder border = gameInstance.getArena().getWorld().getWorldBorder();
 					border.setCenter(gameInstance.getArena().getCenterPoint());
 					border.setSize(2);
 					border.setDamageAmount(0.0);
-					border.setSize(500, 2);
+					border.setSize(800, 2);
 					border.setDamageBuffer(0);
 				}
 				// 20s, 10s, 5s-
@@ -111,7 +111,7 @@ public class GameRunner extends BukkitRunnable
 			if (timer == 0)
 			{
 				gameInstance.ending();
-				timer = 10;
+				timer = 5;
 			}
 			else
 			{

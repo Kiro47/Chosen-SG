@@ -22,6 +22,7 @@ public class Voting
 
 	public static void reset()
 	{
+		System.out.println("RESET VOTES");
 		voted = new HashMap<>();
 
 		int size = Math.min(ArenaManager.getInstance().getArenaCount(), 3);

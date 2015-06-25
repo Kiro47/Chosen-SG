@@ -3,6 +3,8 @@ package com.kiro.sg.scoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -34,6 +36,7 @@ public class GameScoreboard
 
 	public void setGhosts(Player player)
 	{
+		player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100000, 1));
 		ghosts.addPlayer(player);
 	}
 

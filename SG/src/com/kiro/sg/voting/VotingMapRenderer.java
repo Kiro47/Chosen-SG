@@ -87,7 +87,11 @@ public class VotingMapRenderer extends MapRenderer
 
 	public void loadImage(String name, VotingMap mapSet)
 	{
-		File file = new File(Config.ArenaImagesFolder, name.toLowerCase() + ".png");
+		if (name != null)
+		{
+			name = name.toLowerCase();
+		}
+		File file = new File(Config.ArenaImagesFolder, name + ".png");
 		try
 		{
 			if (!file.exists())

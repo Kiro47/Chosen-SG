@@ -1,5 +1,6 @@
 package com.kiro.sg.game;
 
+import com.kiro.sg.SGMain;
 import com.kiro.sg.arena.SGArena;
 import com.kiro.sg.crates.Crates;
 import com.kiro.sg.scoreboard.GameScoreboard;
@@ -9,31 +10,16 @@ import com.kiro.sg.utils.Meta;
 import com.kiro.sg.utils.Msg;
 import com.kiro.sg.utils.task.FireworksTask;
 import com.kiro.sg.utils.task.TeleportTask;
+import com.kiro.sg.utils.task.TrackerTask;
 import org.bukkit.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.kiro.sg.SGMain;
-import com.kiro.sg.arena.SGArena;
-import com.kiro.sg.crates.Crates;
-import com.kiro.sg.scoreboard.GameScoreboard;
-import com.kiro.sg.utils.Meta;
-import com.kiro.sg.utils.Msg;
-import com.kiro.sg.utils.task.TeleportTask;
-import com.kiro.sg.utils.task.TrackerTask;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameInstance
 {
@@ -110,7 +96,7 @@ public class GameInstance
 		new TrackerTask(player).runTaskTimer(SGMain.getPlugin(), 0L, 100L);
 		player.updateInventory();
 		Meta.setMetadata(player, "game", this);
-		
+
 	}
 
 	public void setSpectator(Player player)
@@ -155,7 +141,6 @@ public class GameInstance
 
 		DamageTracker.remove(player);
 
-
 		World world = player.getWorld();
 		Location location = player.getLocation();
 		world.strikeLightningEffect(location);
@@ -163,7 +148,7 @@ public class GameInstance
 		PlayerInventory inv = player.getInventory();
 		for (ItemStack stack : inv.getContents())
 		{
-			if (stack != null)
+			if (stack != null && stack.getType() != Material.AIR)
 			{
 				world.dropItemNaturally(location, stack);
 			}
@@ -171,7 +156,7 @@ public class GameInstance
 
 		for (ItemStack stack : inv.getArmorContents())
 		{
-			if (stack != null)
+			if (stack != null && stack.getType() != Material.AIR)
 			{
 				world.dropItemNaturally(location, stack);
 			}
@@ -181,10 +166,6 @@ public class GameInstance
 
 		if (remaining.size() == 1)
 		{
-			Player winner = remaining.get(0);
-			Msg.msgGame(ChatColor.GREEN + winner.getDisplayName() + ChatColor.AQUA + " has won the game!", this, false);
-
-			new FireworksTask(winner);
 			ending();
 		}
 		else if (remaining.isEmpty())
@@ -205,6 +186,8 @@ public class GameInstance
 		World mainWorld = Bukkit.getWorlds().get(0);
 		player.teleport(mainWorld.getSpawnLocation());
 		player.getInventory().clear();
+
+		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 	}
 
 	public Crates getCrates()
@@ -241,6 +224,14 @@ public class GameInstance
 	{
 		setGameState(GameState.ENDING);
 		gameRunner.setTimer(10);
+
+		if (remaining.size() == 1)
+		{
+			Player winner = remaining.get(0);
+			Msg.msgGame(ChatColor.GREEN + winner.getDisplayName() + ChatColor.AQUA + " has won the game!", this, false);
+
+			new FireworksTask(winner);
+		}
 	}
 
 	public void end()
@@ -261,8 +252,6 @@ public class GameInstance
 		new TeleportTask(remaining, arena.getSpawns());
 		setGameState(GameState.STARTING);
 		arena.getWorld().setTime(15000);
-
-
 	}
 
 }

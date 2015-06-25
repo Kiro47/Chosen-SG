@@ -184,6 +184,7 @@ public class VotingMap
 	{
 		this.option = option;
 		mapRenderer.loadImage(this.option == null ? null : this.option.getMapImageName(), this);
+		arenaName = null;
 		setSigns();
 
 	}
