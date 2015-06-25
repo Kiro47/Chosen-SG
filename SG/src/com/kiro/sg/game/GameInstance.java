@@ -10,14 +10,30 @@ import com.kiro.sg.utils.Msg;
 import com.kiro.sg.utils.task.FireworksTask;
 import com.kiro.sg.utils.task.TeleportTask;
 import org.bukkit.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.kiro.sg.SGMain;
+import com.kiro.sg.arena.SGArena;
+import com.kiro.sg.crates.Crates;
+import com.kiro.sg.scoreboard.GameScoreboard;
+import com.kiro.sg.utils.Meta;
+import com.kiro.sg.utils.Msg;
+import com.kiro.sg.utils.task.TeleportTask;
+import com.kiro.sg.utils.task.TrackerTask;
 
 public class GameInstance
 {
@@ -90,7 +106,11 @@ public class GameInstance
 		player.setAllowFlight(false);
 		player.setScoreboard(scoreboard.getScoreboard());
 		player.getInventory().clear();
+		player.getInventory().addItem(new ItemStack(Material.COMPASS, 1));
+		new TrackerTask(player).runTaskTimer(SGMain.getPlugin(), 0L, 100L);
+		player.updateInventory();
 		Meta.setMetadata(player, "game", this);
+		
 	}
 
 	public void setSpectator(Player player)
