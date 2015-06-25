@@ -1,13 +1,13 @@
 package com.kiro.sg.game;
 
 import com.kiro.sg.SGMain;
-import com.kiro.sg.arena.SGArena;
-import com.kiro.sg.crates.Crates;
+import com.kiro.sg.game.arena.SGArena;
+import com.kiro.sg.game.crates.Crates;
 import com.kiro.sg.scoreboard.GameScoreboard;
-import com.kiro.sg.utils.Chat;
-import com.kiro.sg.utils.DamageTracker;
+import com.kiro.sg.utils.chat.Chat;
+import com.kiro.sg.utils.task.DamageTracker;
 import com.kiro.sg.utils.Meta;
-import com.kiro.sg.utils.Msg;
+import com.kiro.sg.utils.chat.Msg;
 import com.kiro.sg.utils.task.FireworksTask;
 import com.kiro.sg.utils.task.TeleportTask;
 import com.kiro.sg.utils.task.TrackerTask;
@@ -185,6 +185,7 @@ public class GameInstance
 
 		World mainWorld = Bukkit.getWorlds().get(0);
 		player.teleport(mainWorld.getSpawnLocation());
+
 		player.getInventory().clear();
 
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());

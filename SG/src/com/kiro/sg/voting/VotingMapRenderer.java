@@ -1,6 +1,6 @@
 package com.kiro.sg.voting;
 
-import com.kiro.sg.Config;
+import com.kiro.sg.config.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;

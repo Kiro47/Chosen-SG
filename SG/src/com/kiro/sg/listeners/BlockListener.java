@@ -1,6 +1,6 @@
 package com.kiro.sg.listeners;
 
-import com.kiro.sg.Config;
+import com.kiro.sg.config.Config;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

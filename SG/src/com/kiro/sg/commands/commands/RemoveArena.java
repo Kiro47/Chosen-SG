@@ -5,8 +5,8 @@ import com.kiro.sg.commands.GameCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.kiro.sg.arena.ArenaManager;
-import com.kiro.sg.SettingsManager;
+import com.kiro.sg.game.arena.ArenaManager;
+import com.kiro.sg.config.SettingsManager;
 
 @CommandInfo(description = "Remove an arena.", usage = "<name>", aliases = {"removearena", "ra"}, op = true)
 public class RemoveArena extends GameCommand

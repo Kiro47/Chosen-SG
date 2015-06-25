@@ -1,15 +1,11 @@
 package com.kiro.sg;
 
-import com.kiro.sg.arena.ArenaManager;
 import com.kiro.sg.commands.CommandManager;
-import com.kiro.sg.crates.CrateUtils;
+import com.kiro.sg.game.arena.ArenaManager;
+import com.kiro.sg.game.crates.CrateUtils;
+import com.kiro.sg.game.lobby.LobbyManager;
 import com.kiro.sg.listeners.*;
-import com.kiro.sg.listeners.items.HungerRefillCake;
-import com.kiro.sg.listeners.items.NetherstarHeal;
-import com.kiro.sg.listeners.items.RedstoneHealthBonus;
-import com.kiro.sg.listeners.items.Slowball;
-import com.kiro.sg.lobby.LobbyManager;
-import com.kiro.sg.utils.FileUtils;
+import com.kiro.sg.utils.misc.FileUtils;
 import com.kiro.sg.voting.VotingMap;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.Bukkit;
@@ -35,20 +31,22 @@ public class SGMain extends JavaPlugin
 
 		PluginManager pm = Bukkit.getServer().getPluginManager();
 
+		// custom events
+		pm.registerEvents(new CustomEventsListener(), this);
+
 		pm.registerEvents(new LobbyListener(), this);
 		pm.registerEvents(new EntityDamage(), this);
 		pm.registerEvents(new PlayerLeaveArena(), this);
 		pm.registerEvents(new PlayerMove(), this);
-		//pm.registerEvents(new SignManager(), this);
-		pm.registerEvents(new Slowball(), this);
 		pm.registerEvents(new CrateListener(), this);
 
 
 		// Items
-		pm.registerEvents(new HungerRefillCake(), this);
-		pm.registerEvents(new NetherstarHeal(), this);
-		pm.registerEvents(new RedstoneHealthBonus(), this);
-		pm.registerEvents(new Slowball(), this);
+		pm.registerEvents(new CustomItemsListener(), this);
+		//		pm.registerEvents(new HungerRefillCake(), this);
+		//		pm.registerEvents(new NetherstarHeal(), this);
+		//pm.registerEvents(new RedstoneHealthBonus(), this);
+		//		pm.registerEvents(new Slowball(), this);
 		// Items
 
 		pm.registerEvents(new SpectatorListner(), this);

@@ -1,9 +1,9 @@
 package com.kiro.sg.game;
 
-import com.kiro.sg.Config;
+import com.kiro.sg.config.Config;
 import com.kiro.sg.SGMain;
-import com.kiro.sg.utils.Chat;
-import com.kiro.sg.utils.Msg;
+import com.kiro.sg.utils.chat.Chat;
+import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.ChatColor;
 import org.bukkit.WorldBorder;
 import org.bukkit.scheduler.BukkitRunnable;

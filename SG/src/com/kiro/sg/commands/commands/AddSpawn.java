@@ -1,6 +1,6 @@
 package com.kiro.sg.commands.commands;
 
-import com.kiro.sg.arena.SGArena;
+import com.kiro.sg.game.arena.SGArena;
 import com.kiro.sg.commands.CommandInfo;
 import com.kiro.sg.commands.GameCommand;
 import com.kiro.sg.utils.Meta;

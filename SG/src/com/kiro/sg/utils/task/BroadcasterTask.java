@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 
 import com.kiro.sg.SGMain;
-import com.kiro.sg.SettingsManager;
+import com.kiro.sg.config.SettingsManager;
 
 public class BroadcasterTask {
 	

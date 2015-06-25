@@ -1,7 +1,7 @@
 package com.kiro.sg.voting;
 
-import com.kiro.sg.arena.ArenaManager;
-import com.kiro.sg.utils.Perms;
+import com.kiro.sg.game.arena.ArenaManager;
+import com.kiro.sg.config.Perms;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

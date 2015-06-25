@@ -25,7 +25,6 @@ public class CommandManager implements CommandExecutor
 		cmds.add(new RemoveArena());
 		cmds.add(new AddChest());
 		cmds.add(new AddSpawn());
-		cmds.add(new AddLobbySign());
 		cmds.add(new ForceStart());
 		cmds.add(new SaveArena());
 		cmds.add(new AddVoteMap());

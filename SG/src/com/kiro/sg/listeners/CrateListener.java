@@ -1,8 +1,8 @@
 package com.kiro.sg.listeners;
 
-import com.kiro.sg.crates.SupplyCrate;
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.game.GameManager;
+import com.kiro.sg.game.crates.SupplyCrate;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -24,8 +24,8 @@ public class CrateListener implements Listener
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
 			Block block = event.getClickedBlock();
-			if (block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST
-					    || block.getTypeId() == 33 && block.getData() == 7)
+			Material type = block.getType();
+			if (type == Material.CHEST || type == Material.TRAPPED_CHEST || type == Material.ENDER_CHEST)
 			{
 				Player player = event.getPlayer();
 				GameInstance game = GameManager.getInstance(player);
@@ -33,6 +33,10 @@ public class CrateListener implements Listener
 				{
 					event.setCancelled(true);
 					SupplyCrate crate = game.getCrates().getCrate(block.getLocation());
+					if (type == Material.ENDER_CHEST)
+					{
+						crate.populate(3);
+					}
 					crate.open(player);
 
 					World world = player.getWorld();
@@ -41,7 +45,7 @@ public class CrateListener implements Listener
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event)
 	{

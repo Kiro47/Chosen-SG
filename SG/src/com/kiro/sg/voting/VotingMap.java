@@ -1,9 +1,9 @@
 package com.kiro.sg.voting;
 
-import com.kiro.sg.Config;
-import com.kiro.sg.lobby.LobbyManager;
-import com.kiro.sg.utils.Chat;
-import com.kiro.sg.utils.Msg;
+import com.kiro.sg.config.Config;
+import com.kiro.sg.game.lobby.LobbyManager;
+import com.kiro.sg.utils.chat.Chat;
+import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -222,7 +222,10 @@ public class VotingMap
 					{
 						arenaName[1] += aSplit + ' ';
 					}
+
 				}
+				arenaName[0] = ChatColor.BOLD + arenaName[0];
+				arenaName[1] = ChatColor.BOLD + arenaName[1];
 			}
 
 			sign.setLine(0, "=========");
@@ -253,7 +256,7 @@ public class VotingMap
 				prefix = "&0";
 			}
 
-			prefix = Chat.format(prefix);
+			prefix = Chat.format(ChatColor.BOLD + prefix);
 
 			sign.setLine(0, "=========");
 			sign.setLine(1, prefix + "Votes");

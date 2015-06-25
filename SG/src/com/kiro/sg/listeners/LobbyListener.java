@@ -1,7 +1,7 @@
 package com.kiro.sg.listeners;
 
 import com.kiro.sg.game.GameInstance;
-import com.kiro.sg.lobby.LobbyManager;
+import com.kiro.sg.game.lobby.LobbyManager;
 import com.kiro.sg.utils.Meta;
 import com.kiro.sg.voting.Voting;
 import com.kiro.sg.voting.VotingMap;

@@ -1,7 +1,7 @@
 package com.kiro.sg.voting;
 
-import com.kiro.sg.arena.ArenaManager;
-import com.kiro.sg.arena.SGArena;
+import com.kiro.sg.game.arena.ArenaManager;
+import com.kiro.sg.game.arena.SGArena;
 
 import java.util.regex.Pattern;
 

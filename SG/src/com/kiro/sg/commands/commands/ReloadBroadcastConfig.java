@@ -5,7 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.kiro.sg.SettingsManager;
+import com.kiro.sg.config.SettingsManager;
 
 
 public class ReloadBroadcastConfig implements CommandExecutor{
