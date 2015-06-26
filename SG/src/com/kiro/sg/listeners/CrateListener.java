@@ -40,7 +40,7 @@ public class CrateListener implements Listener
 
 						World world = player.getWorld();
 
-						block.setType(Material.CHEST, true);
+						block.setType(type, true);
 
 						world.playSound(block.getLocation(), Sound.CHEST_OPEN, 1.0f, 1.0f);
 					}

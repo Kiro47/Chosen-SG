@@ -1,6 +1,7 @@
 package com.kiro.sg.game;
 
 import com.kiro.sg.SGMain;
+import com.kiro.sg.config.Config;
 import com.kiro.sg.custom.items.ItemCompass;
 import com.kiro.sg.game.arena.SGArena;
 import com.kiro.sg.game.crates.Crates;
@@ -91,6 +92,16 @@ public class GameInstance
 		for (PotionEffect effect : player.getActivePotionEffects())
 		{
 			player.removePotionEffect(effect.getType());
+		}
+
+		if ("Moon Base".equals(arena.getArenaName()))
+		{
+			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 100000, 2));
+		}
+
+		for (Player player1 : remaining)
+		{
+			player.showPlayer(player1);
 		}
 
 		player.setGameMode(GameMode.SURVIVAL);
@@ -196,6 +207,10 @@ public class GameInstance
 		{
 			end();
 		}
+		else if (remaining.size() == 3)
+		{
+			deathmatch();
+		}
 
 	}
 
@@ -256,6 +271,7 @@ public class GameInstance
 
 	public void deathmatch()
 	{
+		gameRunner.setTimer(Config.TIMER_DEATHMATCH_MAX);
 		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
 		Msg.msgGame(ChatColor.RED + Chat.center("<>  Deathmatch  <>"), this, false);
 		Msg.msgGame(ChatColor.RED + Chat.center("The Arena walls are caving in!"), this, false);
