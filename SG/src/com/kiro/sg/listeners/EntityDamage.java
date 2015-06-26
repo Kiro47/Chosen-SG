@@ -15,7 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 public class EntityDamage implements Listener
 {
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamage(EntityDamageEvent event)
 	{
 
@@ -34,7 +34,7 @@ public class EntityDamage implements Listener
 
 		if (instance.getState() != GameState.STARTING)
 		{
-			event.setCancelled(false);
+			//event.setCancelled(false);
 			if (player.getGameMode() == GameMode.SURVIVAL && player.getHealth() - event.getFinalDamage() <= 0)
 			{
 				event.setCancelled(true);

@@ -66,8 +66,9 @@ public class CustomEventsListener implements Listener
 					}
 
 					PlayerDamageByPlayerEvent evt = new PlayerDamageByPlayerEvent(player, dmger, itemUsed);
-					pluginManager.callEvent(evt);
 
+					pluginManager.callEvent(evt);
+					
 					event.setCancelled(evt.isCancelled());
 				}
 			}

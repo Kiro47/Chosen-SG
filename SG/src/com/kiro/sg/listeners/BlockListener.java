@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -43,6 +44,20 @@ public class BlockListener implements Listener
 			}
 		}
 
+	}
+
+	@EventHandler
+	public void onExplosion(BlockExplodeEvent event)
+	{
+		event.setCancelled(true);
+		for (Block block : event.blockList())
+		{
+			if (block.getType() == Material.CHEST)
+			{
+				block.setType(Material.AIR);
+			}
+
+		}
 	}
 
 	@EventHandler

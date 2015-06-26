@@ -2,9 +2,11 @@ package com.kiro.sg.scoreboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 public class LobbyScoreboard
 {
@@ -12,6 +14,7 @@ public class LobbyScoreboard
 
 	private final Scoreboard scoreboard;
 	private final Objective sidebar;
+	private final Team voted;
 
 
 	public LobbyScoreboard()
@@ -22,14 +25,31 @@ public class LobbyScoreboard
 		{
 			objective.unregister();
 		}
+		for (Team objective : scoreboard.getTeams())
+		{
+			objective.unregister();
+		}
 
 		sidebar = scoreboard.registerNewObjective("Sidebar", "dummy");
 		sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+		voted = scoreboard.registerNewTeam("voted");
+		voted.setPrefix(ChatColor.GOLD.toString());
 	}
 
 	public Scoreboard getScoreboard()
 	{
 		return scoreboard;
+	}
+
+	public void addVoted(Player player)
+	{
+		voted.addPlayer(player);
+	}
+
+	public void removeVoted(Player player)
+	{
+		voted.removePlayer(player);
 	}
 
 	public void updateTimer(int time)
@@ -51,5 +71,10 @@ public class LobbyScoreboard
 	public void updatePlayers(int count)
 	{
 		sidebar.getScore(ChatColor.RED + "Players Waiting").setScore(count);
+	}
+
+	public void updateOnlinePlayers()
+	{
+		sidebar.getScore(ChatColor.GREEN + "Online").setScore(Bukkit.getOnlinePlayers().size());
 	}
 }

@@ -28,7 +28,7 @@ public final class Config
 
 	public static Material[] BREAKABLE_BLOCKS = {Material.LEAVES, Material.LEAVES_2, Material.GRASS, Material.YELLOW_FLOWER,
 			                                            Material.RED_ROSE, Material.RED_MUSHROOM, Material.BROWN_MUSHROOM,
-			                                            Material.CROPS, Material.DEAD_BUSH, Material.LONG_GRASS};
+			                                            Material.CROPS, Material.DEAD_BUSH, Material.LONG_GRASS, Material.DOUBLE_PLANT};
 	public static Material[] PLACEABLE_BLOCKS = {Material.TORCH, Material.TNT};
 
 	private Config()

@@ -1,7 +1,8 @@
 package com.kiro.sg.utils.task;
 
 import com.kiro.sg.SGMain;
-import org.bukkit.Bukkit;
+import com.kiro.sg.game.GameInstance;
+import com.kiro.sg.game.GameManager;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -12,10 +13,12 @@ public class CompassTrackerTask extends BukkitRunnable
 
 	private static final long FIND_NEAREST_PLAYER_TICKS = 40;
 	private final Player player;
+	private final GameInstance instance;
 
 	public CompassTrackerTask(Player player)
 	{
 		this.player = player;
+		instance = GameManager.getInstance(player);
 
 		runTaskTimer(SGMain.getPlugin(), 1, FIND_NEAREST_PLAYER_TICKS);
 	}
@@ -28,7 +31,7 @@ public class CompassTrackerTask extends BukkitRunnable
 		Player closest = null;
 		double lastDist = 0D;
 
-		for (Player player : Bukkit.getOnlinePlayers())
+		for (Player player : instance.getRemaining())
 		{
 			if (!player.equals(this.player) && player.getGameMode() == GameMode.SURVIVAL && !player.isSneaking())
 			{

@@ -1,11 +1,15 @@
 package com.kiro.sg.game;
 
-/**
- * Created by Brandon on 6/23/2015.
- */
 public enum GameState
 {
 
-	JOINING, STARTING, PLAYING, DEATHMATCH, ENDING, INIT
+	JOINING("Join"), STARTING("Start"), PLAYING("Play"), DEATHMATCH("DM"), ENDING("End"), INIT("Init");
+
+	public final String text;
+
+	GameState(String text)
+	{
+		this.text = text;
+	}
 
 }

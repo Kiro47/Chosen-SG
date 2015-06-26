@@ -50,7 +50,7 @@ public class GameRunner extends BukkitRunnable
 		gameInstance.getArena().getWorld().setTime(dayNightDriver);
 
 		timer--;
-		gameInstance.getScoreboard().updateTimer(timer);
+		gameInstance.getScoreboard().updateTimer(gameInstance.getState(), timer);
 
 		if (chestRefillTimer++ >= Config.TIMER_CHEST_REFILL)
 		{

@@ -2,6 +2,7 @@ package com.kiro.sg.game.crates;
 
 
 import com.kiro.sg.config.Config;
+import com.kiro.sg.utils.chat.Chat;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -68,7 +69,7 @@ public class CrateUtils
 							{
 								factor = factor.substring(factor.indexOf(':') + 1);
 								ItemMeta meta = stack.getItemMeta();
-								meta.setDisplayName(factor);
+								meta.setDisplayName(Chat.format(factor));
 								stack.setItemMeta(meta);
 							}
 							else if (factor.startsWith("e:"))

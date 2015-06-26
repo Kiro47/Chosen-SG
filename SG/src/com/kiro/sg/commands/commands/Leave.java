@@ -4,6 +4,7 @@ import com.kiro.sg.commands.CommandInfo;
 import com.kiro.sg.commands.GameCommand;
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.game.GameManager;
+import com.kiro.sg.game.lobby.LobbyManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -24,7 +25,8 @@ public class Leave extends GameCommand
 		}
 		else
 		{
-			p.sendMessage(ChatColor.RED + "You are not in a game!");
+			LobbyManager.getInstance().removeFromQueue(p);
+			p.sendMessage(ChatColor.GREEN + "Succefully Left The Game Queue");
 		}
 	}
 

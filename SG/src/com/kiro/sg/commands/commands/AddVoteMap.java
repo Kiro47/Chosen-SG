@@ -2,7 +2,7 @@ package com.kiro.sg.commands.commands;
 
 import com.kiro.sg.commands.CommandInfo;
 import com.kiro.sg.commands.GameCommand;
-import com.kiro.sg.voting.VotingMap;
+import com.kiro.sg.game.lobby.voting.VotingMap;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

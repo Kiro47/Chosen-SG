@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -33,7 +34,7 @@ public class SGArena
 	private Location centerPoint;
 
 	private static int WorldIndex;
-	private int arenaID;
+	private final int arenaID;
 
 	public SGArena(String arenaName, String worldName)
 	{
@@ -45,6 +46,7 @@ public class SGArena
 	public SGArena(String arenaName)
 	{
 		this.arenaName = arenaName;
+		arenaID = WorldIndex++;
 	}
 
 	/**
@@ -101,6 +103,7 @@ public class SGArena
 		try
 		{
 
+			System.out.println("Create World: " + getWorldInUseFolder().getName());
 			FileUtils.copyFolder(new File(Config.ArenaWorldFolder, worldName), getWorldInUseFolder());
 
 			WorldCreator wc = WorldCreator.name(getWorldInUseFolder().getName());
@@ -157,6 +160,8 @@ public class SGArena
 				Location loc = Config.getLocation(spawns.getConfigurationSection(key), world).add(0.5, 0.5, 0.5);
 				spawnPoints.add(loc);
 			}
+
+			Collections.shuffle(spawnPoints);
 
 			if (config.contains("cornChests"))
 			{

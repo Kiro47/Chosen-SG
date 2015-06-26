@@ -7,7 +7,7 @@ import com.kiro.sg.game.lobby.LobbyManager;
 import com.kiro.sg.listeners.*;
 import com.kiro.sg.utils.chat.Chat;
 import com.kiro.sg.utils.misc.FileUtils;
-import com.kiro.sg.voting.VotingMap;
+import com.kiro.sg.game.lobby.voting.VotingMap;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

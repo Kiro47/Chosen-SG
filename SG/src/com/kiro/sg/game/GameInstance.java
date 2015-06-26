@@ -1,6 +1,7 @@
 package com.kiro.sg.game;
 
 import com.kiro.sg.SGMain;
+import com.kiro.sg.custom.items.ItemCompass;
 import com.kiro.sg.game.arena.SGArena;
 import com.kiro.sg.game.crates.Crates;
 import com.kiro.sg.scoreboard.GameScoreboard;
@@ -36,6 +37,7 @@ public class GameInstance
 
 	public GameInstance(List<Player> players, SGArena arena)
 	{
+		System.out.println("Game Start");
 		remaining = players;
 		spectators = new ArrayList<>();
 
@@ -132,7 +134,6 @@ public class GameInstance
 		player.setFoodLevel(20);
 		player.setMaxHealth(20.0);
 		player.setHealth(20.0);
-		player.setAllowFlight(true);
 		player.setGameMode(GameMode.ADVENTURE);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 20), true);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 20, 20), true);
@@ -143,11 +144,12 @@ public class GameInstance
 
 
 		scoreboard.setGhosts(player);
+		player.setAllowFlight(true);
+		player.setFlying(true);
 	}
 
 	public void playerDeath(Player player)
 	{
-		setSpectator(player);
 		player.setFireTicks(0);
 
 		Player killer = DamageTracker.get(player);
@@ -167,6 +169,10 @@ public class GameInstance
 		{
 			if (stack != null && stack.getType() != Material.AIR)
 			{
+				if (stack.getType() == Material.COMPASS)
+				{
+					stack = ItemCompass.reset(stack);
+				}
 				world.dropItemNaturally(location, stack);
 			}
 		}
@@ -180,6 +186,7 @@ public class GameInstance
 		}
 
 		inv.clear();
+		setSpectator(player);
 
 		if (remaining.size() == 1)
 		{
@@ -200,6 +207,9 @@ public class GameInstance
 		}
 
 		Meta.removeMetadata(player, "game");
+		ItemCompass.remove(player);
+		remaining.remove(player);
+		spectators.remove(player);
 
 		World mainWorld = Bukkit.getWorlds().get(0);
 		player.teleport(mainWorld.getSpawnLocation());
@@ -236,8 +246,8 @@ public class GameInstance
 	public void startMatch()
 	{
 		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
-		Msg.msgGame(ChatColor.BLUE + Chat.center("<>  Begin  <>"), this, false);
-		Msg.msgGame(ChatColor.BLUE + Chat.center("Those beside you will try to kill you."), this, false);
+		Msg.msgGame(ChatColor.GOLD + Chat.center("<>  Begin  <>"), this, false);
+		Msg.msgGame(ChatColor.DARK_AQUA + Chat.center("Those beside you will try to kill you."), this, false);
 		Msg.msgGame(ChatColor.RED + Chat.center("Kill them back."), this, false);
 		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
 		arena.getWorld().setTime(0);
@@ -259,7 +269,7 @@ public class GameInstance
 	public void ending()
 	{
 		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
-		Msg.msgGame(ChatColor.GREEN + Chat.center("<>  Game Over  <>"), this, false);
+		Msg.msgGame(ChatColor.GOLD + Chat.center("<>  Game Over  <>"), this, false);
 		setGameState(GameState.ENDING);
 		gameRunner.setTimer(10);
 
@@ -290,7 +300,6 @@ public class GameInstance
 	{
 		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
 		Msg.msgGame(ChatColor.GOLD + Chat.center("<>  Starting  <>"), this, false);
-		Msg.msgGame(ChatColor.RED + Chat.center("Setting up the arena."), this, false);
 		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
 		new TeleportTask(remaining, arena.getSpawns());
 		setGameState(GameState.STARTING);

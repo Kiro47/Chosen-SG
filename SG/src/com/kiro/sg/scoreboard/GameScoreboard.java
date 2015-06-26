@@ -1,5 +1,6 @@
 package com.kiro.sg.scoreboard;
 
+import com.kiro.sg.game.GameState;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -45,7 +46,7 @@ public class GameScoreboard
 		ghosts.removePlayer(player);
 	}
 
-	public void updateTimer(int time)
+	public void updateTimer(GameState state, int time)
 	{
 		ChatColor color = ChatColor.GREEN;
 		if (time < 600)
@@ -57,7 +58,7 @@ public class GameScoreboard
 			color = ChatColor.RED;
 		}
 
-		String text = ChatColor.GRAY + "[" + color + time / 60 + ':' + time % 60 + ChatColor.GRAY + ']';
+		String text = ChatColor.GOLD + state.text + "[" + color + time / 60 + ':' + time % 60 + ']';
 		sidebar.setDisplayName(text);
 	}
 

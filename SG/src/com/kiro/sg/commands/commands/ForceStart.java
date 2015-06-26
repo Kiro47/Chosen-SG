@@ -25,7 +25,6 @@ public class ForceStart extends GameCommand
 		}
 		else
 		{
-
 			SGMain.getPlugin().getLobbyManager().createGame(true);
 		}
 

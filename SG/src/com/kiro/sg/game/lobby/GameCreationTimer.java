@@ -24,6 +24,11 @@ public class GameCreationTimer extends BukkitRunnable
 		runTaskTimer(SGMain.getPlugin(), 20, 20);
 	}
 
+	public LobbyScoreboard getScoreboard()
+	{
+		return scoreboard;
+	}
+
 	public void setTimeRemaining(int time)
 	{
 		countdown = time;
@@ -39,6 +44,8 @@ public class GameCreationTimer extends BukkitRunnable
 	{
 		scoreboard.updatePlayers(lobbyManager.getQueueSize());
 		scoreboard.updateTimer(countdown);
+		scoreboard.updateOnlinePlayers();
+
 		if (countdown == 0)
 		{
 			if (lobbyManager.createGame())

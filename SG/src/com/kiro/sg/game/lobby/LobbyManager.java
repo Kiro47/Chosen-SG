@@ -1,12 +1,11 @@
 package com.kiro.sg.game.lobby;
 
 import com.kiro.sg.config.Config;
-import com.kiro.sg.game.arena.SGArena;
-import com.kiro.sg.game.GameInstance;
-import com.kiro.sg.game.GameManager;
-import com.kiro.sg.utils.chat.Msg;
 import com.kiro.sg.config.Perms;
-import com.kiro.sg.voting.Voting;
+import com.kiro.sg.game.GameInstance;
+import com.kiro.sg.game.arena.SGArena;
+import com.kiro.sg.game.lobby.voting.Voting;
+import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -29,6 +28,7 @@ public class LobbyManager
 
 	private final LinkedList<Player> playerQueue;
 	private final List<Player> donorsWaiting;
+	private final GameCreationTimer timer;
 	private int donorCount = 0;
 
 	public LobbyManager()
@@ -37,7 +37,7 @@ public class LobbyManager
 		Voting.reset();
 		playerQueue = new LinkedList<>();
 		donorsWaiting = new ArrayList<>();
-		new GameCreationTimer(this);
+		timer = new GameCreationTimer(this);
 	}
 
 	/**
@@ -71,7 +71,11 @@ public class LobbyManager
 				index = playerQueue.size();
 			}
 
+			timer.getScoreboard().addVoted(player);
+
+
 			Msg.msgPlayer(player, ChatColor.AQUA + "You have been added to the queue! (" + index + ") ");
+			return index;
 		}
 		return -1;
 	}
@@ -82,11 +86,13 @@ public class LobbyManager
 	public void removeFromQueue(Player player)
 	{
 		//		Meta.removeMetadata(player, "lobby");
+		Voting.removeVote(player);
 		if (player.hasPermission(Perms.DONOR_QUEUE))
 		{
 			donorsWaiting.remove(player);
 		}
 		playerQueue.remove(player);
+		timer.getScoreboard().removeVoted(player);
 	}
 
 	/**
@@ -118,7 +124,6 @@ public class LobbyManager
 		int count = Math.min(24, playerQueue.size());
 		if (count >= Config.MIN_PLAYER_COUNT || force)
 		{
-			boolean flag = true;
 			while (players.size() < count)
 			{
 				Player player = playerQueue.poll();
@@ -127,20 +132,20 @@ public class LobbyManager
 				{
 					if (player.hasPermission(Perms.DONOR_QUEUE))
 					{
+						donorsWaiting.remove(player);
+
 						donorCount--;
 					}
 
+					timer.getScoreboard().removeVoted(player);
 					players.add(player);
 					//Meta.removeMetadata(player, "lobby");
 				}
-
-				flag = !flag;
 			}
 
 			SGArena arena = Voting.getMostVotes().getValue();
 
 			GameInstance gameInstance = new GameInstance(players, arena);
-			GameManager.registerGame(gameInstance);
 
 			gameInstance.init();
 			Voting.reset();

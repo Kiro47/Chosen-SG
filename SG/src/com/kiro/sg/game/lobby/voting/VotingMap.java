@@ -1,4 +1,4 @@
-package com.kiro.sg.voting;
+package com.kiro.sg.game.lobby.voting;
 
 import com.kiro.sg.config.Config;
 import com.kiro.sg.game.lobby.LobbyManager;
