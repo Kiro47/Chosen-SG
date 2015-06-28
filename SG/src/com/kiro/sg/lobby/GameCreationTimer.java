@@ -1,4 +1,4 @@
-package com.kiro.sg.game.lobby;
+package com.kiro.sg.lobby;
 
 import com.kiro.sg.SGMain;
 import com.kiro.sg.config.Config;

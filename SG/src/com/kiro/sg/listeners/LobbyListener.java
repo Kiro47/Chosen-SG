@@ -1,11 +1,11 @@
 package com.kiro.sg.listeners;
 
 import com.kiro.sg.game.GameInstance;
-import com.kiro.sg.game.lobby.LobbyManager;
+import com.kiro.sg.lobby.LobbyManager;
 import com.kiro.sg.utils.Meta;
-import com.kiro.sg.game.lobby.voting.Voting;
-import com.kiro.sg.game.lobby.voting.VotingMap;
-import com.kiro.sg.game.lobby.voting.VotingMapRenderer;
+import com.kiro.sg.lobby.voting.Voting;
+import com.kiro.sg.lobby.voting.VotingMap;
+import com.kiro.sg.lobby.voting.VotingMapRenderer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;

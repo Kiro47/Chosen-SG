@@ -1,4 +1,4 @@
-package com.kiro.sg.game.lobby.voting;
+package com.kiro.sg.lobby.voting;
 
 import com.kiro.sg.game.arena.ArenaManager;
 import com.kiro.sg.game.arena.SGArena;

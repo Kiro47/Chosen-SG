@@ -1,7 +1,7 @@
-package com.kiro.sg.game.lobby.voting;
+package com.kiro.sg.lobby.voting;
 
 import com.kiro.sg.config.Config;
-import com.kiro.sg.game.lobby.LobbyManager;
+import com.kiro.sg.lobby.LobbyManager;
 import com.kiro.sg.utils.chat.ChatUtils;
 import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.*;

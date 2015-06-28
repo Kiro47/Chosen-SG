@@ -1,4 +1,4 @@
-package com.kiro.sg.game.lobby.voting;
+package com.kiro.sg.lobby.voting;
 
 /**
  * Created by Brandon on 6/23/2015.

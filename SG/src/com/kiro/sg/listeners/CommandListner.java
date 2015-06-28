@@ -2,7 +2,7 @@ package com.kiro.sg.listeners;
 
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.game.GameManager;
-import com.kiro.sg.game.lobby.LobbyManager;
+import com.kiro.sg.lobby.LobbyManager;
 import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

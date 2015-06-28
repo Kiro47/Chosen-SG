@@ -1,10 +1,10 @@
-package com.kiro.sg.game.lobby;
+package com.kiro.sg.lobby;
 
 import com.kiro.sg.config.Config;
 import com.kiro.sg.config.Perms;
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.game.arena.SGArena;
-import com.kiro.sg.game.lobby.voting.Voting;
+import com.kiro.sg.lobby.voting.Voting;
 import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

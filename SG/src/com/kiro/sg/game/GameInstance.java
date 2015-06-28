@@ -5,7 +5,7 @@ import com.kiro.sg.config.Config;
 import com.kiro.sg.custom.items.ItemCompass;
 import com.kiro.sg.game.arena.SGArena;
 import com.kiro.sg.game.crates.Crates;
-import com.kiro.sg.game.lobby.voting.VotingMapRenderer;
+import com.kiro.sg.lobby.voting.VotingMapRenderer;
 import com.kiro.sg.scoreboard.GameScoreboard;
 import com.kiro.sg.utils.Meta;
 import com.kiro.sg.utils.chat.ChatUtils;
