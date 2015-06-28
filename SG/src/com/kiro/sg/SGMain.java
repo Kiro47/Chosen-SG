@@ -4,10 +4,10 @@ import com.kiro.sg.commands.CommandManager;
 import com.kiro.sg.game.arena.ArenaManager;
 import com.kiro.sg.game.crates.CrateUtils;
 import com.kiro.sg.game.lobby.LobbyManager;
-import com.kiro.sg.listeners.*;
-import com.kiro.sg.utils.chat.Chat;
-import com.kiro.sg.utils.misc.FileUtils;
 import com.kiro.sg.game.lobby.voting.VotingMap;
+import com.kiro.sg.listeners.*;
+import com.kiro.sg.utils.chat.ChatUtils;
+import com.kiro.sg.utils.misc.FileUtils;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -27,7 +27,7 @@ public class SGMain extends JavaPlugin
 		instance = this;
 
 		CrateUtils.loadLoots();
-		Chat.init();
+		ChatUtils.init();
 
 		getCommand("survivalgames").setExecutor(new CommandManager());
 
@@ -41,18 +41,11 @@ public class SGMain extends JavaPlugin
 		pm.registerEvents(new PlayerLeaveArena(), this);
 		pm.registerEvents(new PlayerMove(), this);
 		pm.registerEvents(new CrateListener(), this);
-
-
-		// Items
+		pm.registerEvents(new ChatListener(), this);
 		pm.registerEvents(new CustomItemsListener(), this);
-		//		pm.registerEvents(new HungerRefillCake(), this);
-		//		pm.registerEvents(new NetherstarHeal(), this);
-		//pm.registerEvents(new RedstoneHealthBonus(), this);
-		//		pm.registerEvents(new Slowball(), this);
-		// Items
-
 		pm.registerEvents(new SpectatorListner(), this);
 		pm.registerEvents(new BlockListener(), this);
+		pm.registerEvents(new CommandListner(), this);
 
 		ArenaManager.getInstance().init();
 		VotingMap.loadMaps();

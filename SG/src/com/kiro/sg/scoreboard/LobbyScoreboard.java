@@ -70,7 +70,7 @@ public class LobbyScoreboard
 
 	public void updatePlayers(int count)
 	{
-		sidebar.getScore(ChatColor.RED + "Players Waiting").setScore(count);
+		sidebar.getScore(ChatColor.GOLD + "Players Waiting").setScore(count);
 	}
 
 	public void updateOnlinePlayers()

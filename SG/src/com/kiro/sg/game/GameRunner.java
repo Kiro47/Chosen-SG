@@ -3,7 +3,7 @@ package com.kiro.sg.game;
 import com.kiro.sg.SGMain;
 import com.kiro.sg.config.Config;
 import com.kiro.sg.game.arena.SGArena;
-import com.kiro.sg.utils.chat.Chat;
+import com.kiro.sg.utils.chat.ChatUtils;
 import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -42,19 +42,26 @@ public class GameRunner extends BukkitRunnable
 	@Override
 	public void run()
 	{
-		dayNightDriver += 80;
-		if (dayNightDriver >= 24000)
+		if (!gameInstance.foreverNight)
 		{
-			dayNightDriver = 0;
+			dayNightDriver += 80;
+			if (dayNightDriver >= 24000)
+			{
+				dayNightDriver = 0;
+			}
+			gameInstance.getArena().getWorld().setTime(dayNightDriver);
 		}
-		gameInstance.getArena().getWorld().setTime(dayNightDriver);
+		else
+		{
+			gameInstance.getArena().getWorld().setTime(17000);
+		}
 
 		timer--;
 		gameInstance.getScoreboard().updateTimer(gameInstance.getState(), timer);
 
 		if (chestRefillTimer++ >= Config.TIMER_CHEST_REFILL)
 		{
-			Msg.msgGame(Chat.center(ChatColor.RED + "The chests have been refilled!"), gameInstance, false);
+			Msg.msgGame(ChatUtils.center(ChatColor.RED + "The chests have been refilled!"), gameInstance, false);
 
 			gameInstance.getCrates().refillCrates();
 			chestRefillTimer = 0;
@@ -88,7 +95,7 @@ public class GameRunner extends BukkitRunnable
 				// 20s, 10s, 5s-
 				if (timer == 20 || timer == 10 || timer <= 5)
 				{
-					Msg.msgGame(Chat.format("&c" + timer + " seconds till start!"), gameInstance, false);
+					Msg.msgGame(ChatUtils.format("&c" + timer + " seconds till start!"), gameInstance, false);
 					SGArena arena = gameInstance.getArena();
 					World world = arena.getWorld();
 					for (Player player : world.getPlayers())
@@ -117,15 +124,15 @@ public class GameRunner extends BukkitRunnable
 				// 15m, 10m, 5m, 1m, 30s, 10s, 5s-
 				if (timer == 60)
 				{
-					Msg.msgGame(Chat.format("&c1 minute remaining!"), gameInstance, false);
+					Msg.msgGame(ChatUtils.format("&c1 minute remaining!"), gameInstance, false);
 				}
 				else if (timer == 300 || timer == 600 || timer == 900)
 				{
-					Msg.msgGame(Chat.format("&c" + timer / 60 + " minutes remaining!"), gameInstance, false);
+					Msg.msgGame(ChatUtils.format("&c" + timer / 60 + " minutes remaining!"), gameInstance, false);
 				}
 				else if (timer == 30 || timer == 10 || timer <= 5)
 				{
-					Msg.msgGame(Chat.format("&c" + timer + " seconds remaining!"), gameInstance, false);
+					Msg.msgGame(ChatUtils.format("&c" + timer + " seconds remaining!"), gameInstance, false);
 				}
 			}
 		}
@@ -141,15 +148,15 @@ public class GameRunner extends BukkitRunnable
 				// 15m, 10m, 5m, 1m, 30s, 10s, 5s-
 				if (timer == 60)
 				{
-					Msg.msgGame(Chat.format("&c1 minute remaining!"), gameInstance, false);
+					Msg.msgGame(ChatUtils.format("&c1 minute remaining!"), gameInstance, false);
 				}
 				else if (timer == 300 || timer == 240 || timer == 180 || timer == 120)
 				{
-					Msg.msgGame(Chat.format("&c" + timer / 60 + " minutes remaining!"), gameInstance, false);
+					Msg.msgGame(ChatUtils.format("&c" + timer / 60 + " minutes remaining!"), gameInstance, false);
 				}
 				else if (timer == 30 || timer == 10 || timer <= 5)
 				{
-					Msg.msgGame(Chat.format("&c" + timer + " seconds remaining!"), gameInstance, false);
+					Msg.msgGame(ChatUtils.format("&c" + timer + " seconds remaining!"), gameInstance, false);
 				}
 			}
 		}

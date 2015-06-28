@@ -1,6 +1,7 @@
 package com.kiro.sg.utils.chat;
 
 import com.kiro.sg.game.GameInstance;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public final class Msg
@@ -11,19 +12,26 @@ public final class Msg
 
 	}
 
+	public static void msgWorld(World world, String message)
+	{
+		for (Player player : world.getPlayers())
+		{
+			player.sendMessage(message);
+		}
+	}
+
 	public static void msgGame(String message, GameInstance game, boolean spectator)
 	{
-		for (Player player : game.getSpectators())
+		if (spectator)
 		{
-			msgPlayer(player, message);
-		}
-
-		if (!spectator)
-		{
-			for (Player player : game.getRemaining())
+			for (Player player : game.getSpectators())
 			{
 				msgPlayer(player, message);
 			}
+		}
+		else
+		{
+			msgWorld(game.getArena().getWorld(), message);
 		}
 	}
 

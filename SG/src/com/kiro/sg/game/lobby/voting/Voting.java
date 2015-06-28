@@ -1,8 +1,10 @@
 package com.kiro.sg.game.lobby.voting;
 
-import com.kiro.sg.game.arena.ArenaManager;
 import com.kiro.sg.config.Perms;
+import com.kiro.sg.game.arena.ArenaManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -18,7 +20,6 @@ public class Voting
 
 	private static VotingOption winning;
 	private static int winning_votes;
-
 
 	public static void reset()
 	{
@@ -56,6 +57,13 @@ public class Voting
 				VotingMap.VotingMaps.get(i).setVotingOption(null);
 			}
 		}
+
+		World world = Bukkit.getWorlds().get(0);
+
+		for (Player player : world.getPlayers())
+		{
+			VotingMapRenderer.sendToPlayer(player);
+		}
 	}
 
 	public static void removeVote(Player player)
@@ -70,6 +78,8 @@ public class Voting
 			{
 				voteOption.removeVote();
 			}
+
+			voted.remove(player);
 
 			getMostVotes();
 

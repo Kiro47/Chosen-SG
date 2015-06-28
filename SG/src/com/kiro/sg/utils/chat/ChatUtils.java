@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import java.lang.reflect.Field;
 import java.util.regex.Pattern;
 
-public final class Chat
+public final class ChatUtils
 {
 
 	private static final int[] FONT_SIZES =
@@ -63,7 +63,7 @@ public final class Chat
 		}
 		else
 		{
-			return Chat.FONT_SIZES[index + 32];
+			return ChatUtils.FONT_SIZES[index + 32];
 		}
 	}
 
@@ -103,7 +103,7 @@ public final class Chat
 		for (int index = 0; index < s.length(); index++)
 		{
 			char ch = s.charAt(index);
-			size += Chat.charWidth(ch);
+			size += ChatUtils.charWidth(ch);
 		}
 
 		return size;

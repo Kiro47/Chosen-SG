@@ -2,7 +2,7 @@ package com.kiro.sg.game.lobby.voting;
 
 import com.kiro.sg.config.Config;
 import com.kiro.sg.game.lobby.LobbyManager;
-import com.kiro.sg.utils.chat.Chat;
+import com.kiro.sg.utils.chat.ChatUtils;
 import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -214,7 +214,7 @@ public class VotingMap
 
 				for (String aSplit : split)
 				{
-					if (arenaName[0].length() + aSplit.length() <= 15)
+					if (arenaName[0].length() + aSplit.length() <= 13)
 					{
 						arenaName[0] += aSplit + ' ';
 					}
@@ -228,10 +228,10 @@ public class VotingMap
 				arenaName[1] = ChatColor.BOLD + arenaName[1];
 			}
 
-			sign.setLine(0, "=========");
+			sign.setLine(0, "===============");
 			sign.setLine(1, arenaName[0]);
 			sign.setLine(2, arenaName[1]);
-			sign.setLine(3, "=========");
+			sign.setLine(3, "===============");
 			sign.update();
 		}
 		block = sign2.getBlock();
@@ -256,12 +256,12 @@ public class VotingMap
 				prefix = "&0";
 			}
 
-			prefix = Chat.format(ChatColor.BOLD + prefix);
+			prefix = ChatUtils.format(prefix) + ChatColor.BOLD;
 
-			sign.setLine(0, "=========");
+			sign.setLine(0, "===============");
 			sign.setLine(1, prefix + "Votes");
 			sign.setLine(2, prefix + option.getVotes());
-			sign.setLine(3, "=========");
+			sign.setLine(3, "===============");
 			sign.update();
 		}
 	}

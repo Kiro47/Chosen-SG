@@ -5,9 +5,10 @@ import com.kiro.sg.config.Config;
 import com.kiro.sg.custom.items.ItemCompass;
 import com.kiro.sg.game.arena.SGArena;
 import com.kiro.sg.game.crates.Crates;
+import com.kiro.sg.game.lobby.voting.VotingMapRenderer;
 import com.kiro.sg.scoreboard.GameScoreboard;
 import com.kiro.sg.utils.Meta;
-import com.kiro.sg.utils.chat.Chat;
+import com.kiro.sg.utils.chat.ChatUtils;
 import com.kiro.sg.utils.chat.Msg;
 import com.kiro.sg.utils.task.DamageTracker;
 import com.kiro.sg.utils.task.FireworksTask;
@@ -31,6 +32,8 @@ public class GameInstance
 	private final SGArena arena;
 	private final Crates crates;
 	private GameRunner gameRunner;
+
+	public boolean foreverNight = false;
 
 	private GameState state;
 
@@ -94,8 +97,9 @@ public class GameInstance
 			player.removePotionEffect(effect.getType());
 		}
 
-		if ("Moon Base".equals(arena.getArenaName()))
+		if ("Moon Base 9".equals(arena.getArenaName()))
 		{
+			foreverNight = true;
 			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 100000, 2));
 		}
 
@@ -166,7 +170,7 @@ public class GameInstance
 		Player killer = DamageTracker.get(player);
 		if (killer != null)
 		{
-			Msg.msgGame(Chat.format(String.format("&c%s &ehas been killed by &c%s", player.getDisplayName(), killer.getDisplayName())), this, false);
+			Msg.msgGame(ChatUtils.format(String.format("&c%s &ehas been killed by &c%s", player.getDisplayName(), killer.getDisplayName())), this, false);
 		}
 
 		DamageTracker.remove(player);
@@ -230,6 +234,8 @@ public class GameInstance
 		player.teleport(mainWorld.getSpawnLocation());
 
 		player.setFireTicks(0);
+		player.setFlying(false);
+		player.setAllowFlight(false);
 		player.getInventory().setContents(new ItemStack[27]);
 		player.getInventory().setArmorContents(new ItemStack[4]);
 
@@ -241,6 +247,7 @@ public class GameInstance
 		}
 
 		player.updateInventory();
+		VotingMapRenderer.sendToPlayer(player);
 	}
 
 	public Crates getCrates()
@@ -260,11 +267,11 @@ public class GameInstance
 
 	public void startMatch()
 	{
-		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
-		Msg.msgGame(ChatColor.GOLD + Chat.center("<>  Begin  <>"), this, false);
-		Msg.msgGame(ChatColor.DARK_AQUA + Chat.center("Those beside you will try to kill you."), this, false);
-		Msg.msgGame(ChatColor.RED + Chat.center("Kill them back."), this, false);
-		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
+		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
+		Msg.msgGame(ChatColor.GOLD + ChatUtils.center("<>  Begin  <>"), this, false);
+		Msg.msgGame(ChatColor.DARK_AQUA + ChatUtils.center("Those beside you will try to kill you."), this, false);
+		Msg.msgGame(ChatColor.RED + ChatUtils.center("Kill them back."), this, false);
+		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
 		arena.getWorld().setTime(0);
 		setGameState(GameState.PLAYING);
 	}
@@ -272,10 +279,10 @@ public class GameInstance
 	public void deathmatch()
 	{
 		gameRunner.setTimer(Config.TIMER_DEATHMATCH_MAX);
-		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
-		Msg.msgGame(ChatColor.RED + Chat.center("<>  Deathmatch  <>"), this, false);
-		Msg.msgGame(ChatColor.RED + Chat.center("The Arena walls are caving in!"), this, false);
-		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
+		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
+		Msg.msgGame(ChatColor.RED + ChatUtils.center("<>  Deathmatch  <>"), this, false);
+		Msg.msgGame(ChatColor.RED + ChatUtils.center("The Arena walls are caving in!"), this, false);
+		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
 		setGameState(GameState.DEATHMATCH);
 		WorldBorder border = arena.getWorld().getWorldBorder();
 		border.setDamageAmount(4.0);
@@ -284,19 +291,19 @@ public class GameInstance
 
 	public void ending()
 	{
-		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
-		Msg.msgGame(ChatColor.GOLD + Chat.center("<>  Game Over  <>"), this, false);
+		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
+		Msg.msgGame(ChatColor.GOLD + ChatUtils.center("<>  Game Over  <>"), this, false);
 		setGameState(GameState.ENDING);
 		gameRunner.setTimer(10);
 
 		if (remaining.size() == 1)
 		{
 			Player winner = remaining.get(0);
-			Msg.msgGame(Chat.center(ChatColor.GREEN + winner.getDisplayName() + ChatColor.AQUA + " has won the game!"), this, false);
+			Msg.msgGame(ChatUtils.center(ChatColor.GREEN + winner.getDisplayName() + ChatColor.AQUA + " has won the game!"), this, false);
 
 			new FireworksTask(winner);
 		}
-		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
+		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
 	}
 
 	public void end()
@@ -314,9 +321,9 @@ public class GameInstance
 
 	public void start()
 	{
-		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
-		Msg.msgGame(ChatColor.GOLD + Chat.center("<>  Starting  <>"), this, false);
-		Msg.msgGame(ChatColor.YELLOW + Chat.fill("-"), this, false);
+		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
+		Msg.msgGame(ChatColor.GOLD + ChatUtils.center("<>  Starting  <>"), this, false);
+		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
 		new TeleportTask(remaining, arena.getSpawns());
 		setGameState(GameState.STARTING);
 		arena.getWorld().setTime(15000);

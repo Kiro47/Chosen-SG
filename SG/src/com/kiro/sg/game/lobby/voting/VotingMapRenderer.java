@@ -89,7 +89,14 @@ public class VotingMapRenderer extends MapRenderer
 	{
 		if (name != null)
 		{
-			name = name.toLowerCase();
+			if ("Random".equals(name))
+			{
+				name = name.toLowerCase() + (int) (Math.random() * 6);
+			}
+			else
+			{
+				name = name.toLowerCase();
+			}
 		}
 		File file = new File(Config.ArenaImagesFolder, name + ".png");
 		try

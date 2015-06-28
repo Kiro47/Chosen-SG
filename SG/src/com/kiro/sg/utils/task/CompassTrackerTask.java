@@ -33,14 +33,21 @@ public class CompassTrackerTask extends BukkitRunnable
 
 		for (Player player : instance.getRemaining())
 		{
-			if (!player.equals(this.player) && player.getGameMode() == GameMode.SURVIVAL && !player.isSneaking())
+			try
 			{
-				double dist = playerLoc.distanceSquared(player.getLocation());
-				if (closest == null || dist < lastDist)
+				if (!player.equals(this.player) && player.getGameMode() == GameMode.SURVIVAL && !player.isSneaking())
 				{
-					closest = player;
-					lastDist = dist;
+					double dist = playerLoc.distanceSquared(player.getLocation());
+					if (closest == null || dist < lastDist)
+					{
+						closest = player;
+						lastDist = dist;
+					}
 				}
+			}
+			catch (Exception e)
+			{
+				
 			}
 		}
 

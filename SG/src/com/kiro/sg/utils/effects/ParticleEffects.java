@@ -4,8 +4,8 @@ import com.kiro.sg.utils.misc.VecUtils;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -24,8 +24,8 @@ public final class ParticleEffects
 	{
 
 		Packet packet = new PacketPlayOutWorldParticles(effect.enumParticle, false, (float) location.getX(), (float) location.getY(), (float) location.getZ(), offX, offY, offZ, speed, count);
-
-		for (Player player : Bukkit.getOnlinePlayers())
+		World world = location.getWorld();
+		for (Player player : world.getPlayers())
 		{
 			Location loc = player.getLocation();
 			if (loc.distanceSquared(location) < 4096)
@@ -35,11 +35,11 @@ public final class ParticleEffects
 		}
 	}
 
-	public static void playEffect(ParticleType effect, double px, double py, double pz, float offX, float offY, float offZ, float speed, int count)
+	public static void playEffect(ParticleType effect, World world, double px, double py, double pz, float offX, float offY, float offZ, float speed, int count)
 	{
 		Packet packet = new PacketPlayOutWorldParticles(effect.enumParticle, false, (float) px, (float) py, (float) pz, offX, offY, offZ, speed, count);
 
-		for (Player player : Bukkit.getOnlinePlayers())
+		for (Player player : world.getPlayers())
 		{
 			Location loc = player.getLocation();
 			if (VecUtils.getDistanceSquared(loc.getX(), loc.getZ(), px, pz) < 4096)
