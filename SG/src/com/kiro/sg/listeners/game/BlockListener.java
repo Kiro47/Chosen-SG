@@ -1,4 +1,4 @@
-package com.kiro.sg.listeners;
+package com.kiro.sg.listeners.game;
 
 import com.kiro.sg.config.Config;
 import org.bukkit.GameMode;

@@ -36,6 +36,7 @@ public class MySQL extends Database
 			this.connectionURL = "jdbc:mysql://" + MySQLConfig.SQL_HOST + ':' + MySQLConfig.SQL_PORT + '/' + MySQLConfig.SQL_DATABASE;
 			this.connecting = false;
 		}
+
 	}
 
 	public static void init(File file, Plugin pl)
@@ -90,5 +91,6 @@ public class MySQL extends Database
 	{
 		return this.connection;
 	}
+
 
 }

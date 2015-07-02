@@ -36,6 +36,8 @@ public class SGArena
 	private static int WorldIndex;
 	private final int arenaID;
 
+	private ArenaAttributes attributes;
+
 	public SGArena(String arenaName, String worldName)
 	{
 		this.arenaName = arenaName;
@@ -134,6 +136,8 @@ public class SGArena
 		{
 			System.out.println("Couldn't Unload World! " + world.getName());
 		}
+		spawnPoints.clear();
+		cornChests.clear();
 	}
 
 	/**
@@ -176,11 +180,19 @@ public class SGArena
 				}
 			}
 
+			attributes = new ArenaAttributes();
+			attributes.load(config);
+
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public ArenaAttributes getAttributes()
+	{
+		return attributes;
 	}
 
 	/**

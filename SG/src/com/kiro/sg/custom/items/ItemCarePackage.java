@@ -58,8 +58,7 @@ public class ItemCarePackage extends CustomItem
 				GameInstance gameInstance = GameManager.getInstance(owner);
 				if (gameInstance != null)
 				{
-					SupplyCrate crate = gameInstance.getCrates().getCrate(location);
-					crate.populate(2);
+					SupplyCrate crate = gameInstance.getCrates().getCrate(location, 3);
 				}
 
 				//Entity entity, int time, int split, double wrapps, int height, int points, double radius, Effect effect

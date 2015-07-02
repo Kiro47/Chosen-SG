@@ -29,7 +29,6 @@ public class LobbyManager
 	private final LinkedList<Player> playerQueue;
 	private final List<Player> donorsWaiting;
 	private final GameCreationTimer timer;
-	private int donorCount = 0;
 
 	public LobbyManager()
 	{
@@ -61,7 +60,6 @@ public class LobbyManager
 				// Donors will fill every OTHER slot in the queue to give normal players a chance to get into a game.
 				index = Math.min(donorsWaiting.size() * 2, playerQueue.size());
 				playerQueue.add(index, player);
-				donorCount++;
 
 				index += 1;
 			}
@@ -85,7 +83,6 @@ public class LobbyManager
 	 */
 	public void removeFromQueue(Player player)
 	{
-		//		Meta.removeMetadata(player, "lobby");
 		Voting.removeVote(player);
 		if (player.hasPermission(Perms.DONOR_QUEUE))
 		{
@@ -133,8 +130,6 @@ public class LobbyManager
 					if (player.hasPermission(Perms.DONOR_QUEUE))
 					{
 						donorsWaiting.remove(player);
-
-						donorCount--;
 					}
 
 					timer.getScoreboard().removeVoted(player);

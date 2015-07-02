@@ -93,7 +93,6 @@ public class CrateUtils
 		{
 			e.printStackTrace();
 		}
-
 	}
 
 	public static ItemStack getChestItem()
@@ -103,7 +102,6 @@ public class CrateUtils
 		int i2 = (int) (Math.random() * stacks[index].length);
 
 		return stacks[index][i2];
-
 	}
 
 	public static ItemStack getWeightedItem(int mod)
@@ -132,30 +130,32 @@ public class CrateUtils
 		return stacks[index][i2];
 	}
 
-	public static ItemStack[] createContents(int size)
+	public static ItemStack[] createContents(int size, int mod)
 	{
 		ItemStack[] contents = new ItemStack[size];
 		int i = 0;
-
+		int max = (int) (5 - Math.random() * mod);
 		List<Material> used = new ArrayList<>();
 
 		do
 		{
 			try
 			{
-				ItemStack stack = getChestItem();
+				ItemStack stack = getWeightedItem(mod);
 				if (!used.contains(stack.getType()))
 				{
 					contents[(int) (Math.random() * size)] = stack;
 					used.add(stack.getType());
 				}
+
+				
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
-		while (++i < 5);
+		while (++i < max);
 
 		return contents;
 

@@ -100,6 +100,7 @@ public class Consumer implements Runnable
 					else
 					{
 						this.db.connect();
+						Thread.sleep(10000);
 					}
 				}
 			}

@@ -1,17 +1,19 @@
-package com.kiro.sg.listeners;
+package com.kiro.sg.listeners.lobby;
 
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.lobby.LobbyManager;
-import com.kiro.sg.utils.Meta;
 import com.kiro.sg.lobby.voting.Voting;
 import com.kiro.sg.lobby.voting.VotingMap;
 import com.kiro.sg.lobby.voting.VotingMapRenderer;
+import com.kiro.sg.utils.Meta;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -22,6 +24,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class LobbyListener implements Listener
 {
+
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event)
@@ -89,6 +92,16 @@ public class LobbyListener implements Listener
 				}
 			}
 		}
+
+		if (event.hasBlock())
+		{
+			Block block = event.getClickedBlock();
+			if (block.getType() == Material.DRAGON_EGG)
+			{
+				event.setCancelled(true);
+				event.setUseInteractedBlock(Event.Result.DENY);
+			}
+		}
 	}
 
 	private static boolean interact(Entity entity, Player player)
@@ -101,9 +114,9 @@ public class LobbyListener implements Listener
 				if (map != null)
 				{
 					map.onClick(player);
-					return true;
 				}
 			}
+			return true;
 		}
 		return false;
 	}

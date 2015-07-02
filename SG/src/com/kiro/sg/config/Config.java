@@ -11,8 +11,10 @@ public final class Config
 {
 	public static final File ConfigFolder = new File("./plugins/SurvivalGames");
 	public static final File LootConfigFile = new File(ConfigFolder, "loot.yml");
+	public static final File TopListConfigFile = new File(ConfigFolder, "tops.yml");
 
 	public static final File ArenaListFile = new File(ConfigFolder, "arenas.yml");
+	public static final File GameSignFile = new File(ConfigFolder, "gameSigns.yml");
 	public static final File VotingMapFile = new File(ConfigFolder, "voting.yml");
 	public static final File ArenaConfigFolder = new File(ConfigFolder, "/arenas/");
 	public static final File ArenaWorldFolder = new File(ConfigFolder, "/maps/");
@@ -26,7 +28,7 @@ public final class Config
 	public static int TIMER_DEATHMATCH_MAX = 300; // 5 mins
 	public static int TIMER_CHEST_REFILL = 600; // 10 mins
 
-	public static Material[] BREAKABLE_BLOCKS = {Material.LEAVES, Material.LEAVES_2, Material.GRASS, Material.YELLOW_FLOWER,
+	public static Material[] BREAKABLE_BLOCKS = {Material.LEAVES, Material.LEAVES_2, Material.YELLOW_FLOWER,
 			                                            Material.RED_ROSE, Material.RED_MUSHROOM, Material.BROWN_MUSHROOM,
 			                                            Material.CROPS, Material.DEAD_BUSH, Material.LONG_GRASS, Material.DOUBLE_PLANT};
 	public static Material[] PLACEABLE_BLOCKS = {Material.TORCH, Material.TNT};
@@ -45,8 +47,30 @@ public final class Config
 		return new Location(world, px, py, pz);
 	}
 
+	public static Location getLocation(String path, ConfigurationSection config, World world)
+	{
+		config = config.getConfigurationSection(path);
+		if (config != null)
+		{
+			double px = config.getInt("px");
+			double py = config.getInt("py");
+			double pz = config.getInt("pz");
+
+			return new Location(world, px, py, pz);
+		}
+		return null;
+	}
+
 	public static void saveLocation(ConfigurationSection config, Location loc)
 	{
+		config.set("px", loc.getBlockX());
+		config.set("py", loc.getBlockY());
+		config.set("pz", loc.getBlockZ());
+	}
+
+	public static void saveLocation(String path, ConfigurationSection config, Location loc)
+	{
+		config = config.createSection(path);
 		config.set("px", loc.getBlockX());
 		config.set("py", loc.getBlockY());
 		config.set("pz", loc.getBlockZ());

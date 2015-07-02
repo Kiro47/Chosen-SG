@@ -35,6 +35,19 @@ public class GameScoreboard
 		return scoreboard;
 	}
 
+	public void dispose()
+	{
+		try
+		{
+			sidebar.unregister();
+			ghosts.unregister();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
 	public void setGhosts(Player player)
 	{
 		player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100000, 1));
@@ -59,6 +72,7 @@ public class GameScoreboard
 		}
 
 		String text = ChatColor.GOLD + state.text + "[" + color + time / 60 + ':' + time % 60 + ']';
+		text = String.format("%s%s%s[%s%02d:%02d%s]", ChatColor.GOLD.toString(), state.text, ChatColor.GRAY.toString(), color.toString(), time / 60, time % 60, ChatColor.GRAY.toString());
 		sidebar.setDisplayName(text);
 	}
 

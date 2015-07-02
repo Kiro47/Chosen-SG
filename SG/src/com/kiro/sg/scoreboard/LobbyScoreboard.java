@@ -65,6 +65,7 @@ public class LobbyScoreboard
 		}
 
 		String text = ChatColor.GRAY + "[" + color + time / 60 + ':' + time % 60 + ChatColor.GRAY + ']';
+		text = String.format("%s [%s%02d:%02d%s]", ChatColor.GRAY.toString(), color.toString(), time / 60, time % 60, ChatColor.GRAY.toString());
 		sidebar.setDisplayName(text);
 	}
 

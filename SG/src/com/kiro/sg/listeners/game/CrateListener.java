@@ -1,4 +1,4 @@
-package com.kiro.sg.listeners;
+package com.kiro.sg.listeners.game;
 
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.game.GameManager;
@@ -31,16 +31,27 @@ public class CrateListener implements Listener
 				Player player = event.getPlayer();
 				if (player.getGameMode() == GameMode.SURVIVAL)
 				{
+
 					GameInstance game = GameManager.getInstance(player);
 					if (game != null)
 					{
+						int mod = 0;
+						if (type == Material.TRAPPED_CHEST)
+						{
+							mod = 2;
+						}
+						else if (type == Material.ENDER_CHEST)
+						{
+							mod = 3;
+						}
+
 						event.setCancelled(true);
-						SupplyCrate crate = game.getCrates().getCrate(block.getLocation());
+						SupplyCrate crate = game.getCrates().getCrate(block.getLocation(), mod);
 						crate.open(player);
 
 						World world = player.getWorld();
 
-						block.setType(type, true);
+						block.getState().update(true);
 
 						world.playSound(block.getLocation(), Sound.CHEST_OPEN, 1.0f, 1.0f);
 					}

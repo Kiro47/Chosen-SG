@@ -1,30 +1,39 @@
 package com.kiro.sg.game;
 
+import com.kiro.sg.PlayerStats;
 import com.kiro.sg.SGMain;
 import com.kiro.sg.config.Config;
 import com.kiro.sg.custom.items.ItemCompass;
 import com.kiro.sg.game.arena.SGArena;
 import com.kiro.sg.game.crates.Crates;
+import com.kiro.sg.game.spectators.CompassMenu;
+import com.kiro.sg.lobby.GameSign;
 import com.kiro.sg.lobby.voting.VotingMapRenderer;
+import com.kiro.sg.mysql.Consumer;
+import com.kiro.sg.mysql.query.queries.AddGameQuery;
+import com.kiro.sg.mysql.query.queries.GetInsertIndex;
+import com.kiro.sg.mysql.query.queries.UpdateGameQuery;
 import com.kiro.sg.scoreboard.GameScoreboard;
+import com.kiro.sg.utils.LastIDable;
 import com.kiro.sg.utils.Meta;
 import com.kiro.sg.utils.chat.ChatUtils;
 import com.kiro.sg.utils.chat.Msg;
+import com.kiro.sg.utils.misc.ItemUtils;
 import com.kiro.sg.utils.task.DamageTracker;
 import com.kiro.sg.utils.task.FireworksTask;
 import com.kiro.sg.utils.task.TeleportTask;
-import com.kiro.sg.utils.task.TrackerTask;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameInstance
+public class GameInstance implements LastIDable
 {
 
 	private final List<Player> remaining;
@@ -33,11 +42,33 @@ public class GameInstance
 	private final Crates crates;
 	private GameRunner gameRunner;
 
-	public boolean foreverNight = false;
-
 	private GameState state;
 
 	private GameScoreboard scoreboard;
+
+	private GameSign gameSign;
+	private final CompassMenu compassMenu;
+
+	private int gameID;
+
+	private Player winner;
+
+	public void setGameSign(GameSign sign)
+	{
+		gameSign = sign;
+	}
+
+	@Override
+	public int getID()
+	{
+		return gameID;
+	}
+
+	@Override
+	public void setID(int id)
+	{
+		gameID = id;
+	}
 
 	public GameInstance(List<Player> players, SGArena arena)
 	{
@@ -48,6 +79,8 @@ public class GameInstance
 		this.arena = arena.createNew();
 		crates = new Crates();
 		state = GameState.INIT;
+		GameSign.setGame(this);
+		compassMenu = new CompassMenu(this);
 	}
 
 	public SGArena getArena()
@@ -57,7 +90,6 @@ public class GameInstance
 
 	public void init()
 	{
-		gameRunner = new GameRunner(this);
 		scoreboard = new GameScoreboard();
 		arena.loadArena();
 
@@ -67,6 +99,11 @@ public class GameInstance
 		}
 
 		scoreboard.updatePlayers(remaining.size());
+		compassMenu.update();
+
+		Consumer.queue(new AddGameQuery(this));
+		Consumer.queue(new GetInsertIndex(this));
+		gameRunner = new GameRunner(this);
 	}
 
 	public List<Player> getRemaining()
@@ -91,37 +128,63 @@ public class GameInstance
 
 	public void preparePlayer(Player player)
 	{
-
-		for (PotionEffect effect : player.getActivePotionEffects())
+		if (state == GameState.JOINING || state == GameState.INIT)
 		{
-			player.removePotionEffect(effect.getType());
+			for (PotionEffect effect : player.getActivePotionEffects())
+			{
+				player.removePotionEffect(effect.getType());
+			}
+
+			arena.getAttributes().setPotionEffects(player);
+
+			for (Player p : Bukkit.getOnlinePlayers())
+			{
+				if (player.canSee(p))
+				{
+					player.hidePlayer(p);
+				}
+			}
+
+			for (Player p : remaining)
+			{
+				if (!player.canSee(p))
+				{
+					player.showPlayer(p);
+				}
+			}
+
+			player.setLevel(0);
+			player.setGameMode(GameMode.SURVIVAL);
+			player.setMaxHealth(20.0);
+			player.setHealth(20.0);
+			player.setFoodLevel(20);
+			player.setAllowFlight(false);
+
+			player.getInventory().setContents(new ItemStack[27]);
+			player.getInventory().setArmorContents(new ItemStack[4]);
+
+			player.updateInventory();
+
+			PlayerStats stats = PlayerStats.getStats(player);
+			if (stats != null)
+			{
+				stats.addGame();
+			}
+		}
+		else
+		{
+			Msg.msgPlayer(player, ChatColor.DARK_GREEN + "You have been added as a spectator");
+			setSpectator(player);
 		}
 
-		if ("Moon Base 9".equals(arena.getArenaName()))
-		{
-			foreverNight = true;
-			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 100000, 2));
-		}
-
-		for (Player player1 : remaining)
-		{
-			player.showPlayer(player1);
-		}
-
-		player.setGameMode(GameMode.SURVIVAL);
-		player.setMaxHealth(20.0);
-		player.setHealth(20.0);
-		player.setFoodLevel(20);
-		player.setAllowFlight(false);
 		player.setScoreboard(scoreboard.getScoreboard());
-
-		player.getInventory().setContents(new ItemStack[27]);
-		player.getInventory().setArmorContents(new ItemStack[4]);
-
-		new TrackerTask(player).runTaskTimer(SGMain.getPlugin(), 0L, 100L);
-		player.updateInventory();
 		Meta.setMetadata(player, "game", this);
 
+	}
+
+	public CompassMenu getCompassMenu()
+	{
+		return compassMenu;
 	}
 
 	public void setSpectator(Player player)
@@ -131,7 +194,6 @@ public class GameInstance
 
 		scoreboard.updatePlayers(remaining.size());
 
-		player.sendMessage(ChatColor.RED + "You have died.");
 
 		for (Player p : remaining)
 		{
@@ -150,12 +212,15 @@ public class GameInstance
 		player.setMaxHealth(20.0);
 		player.setHealth(20.0);
 		player.setGameMode(GameMode.ADVENTURE);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 20), true);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 20, 20), true);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 20), true);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 40, 20), true);
 
 		player.getInventory().setContents(new ItemStack[27]);
 		player.getInventory().setArmorContents(new ItemStack[4]);
 		player.updateInventory();
+
+		player.getInventory().setItem(0, CompassMenu.getCompassItem());
+		player.getInventory().setItem(8, ItemUtils.nameItem(new ItemStack(Material.BED), ChatUtils.format("&4Leave Game!")));
 
 
 		scoreboard.setGhosts(player);
@@ -163,14 +228,39 @@ public class GameInstance
 		player.setFlying(true);
 	}
 
+
 	public void playerDeath(Player player)
 	{
 		player.setFireTicks(0);
 
-		Player killer = DamageTracker.get(player);
-		if (killer != null)
+		if (state != GameState.ENDING && state != GameState.ENDED)
 		{
-			Msg.msgGame(ChatUtils.format(String.format("&c%s &ehas been killed by &c%s", player.getDisplayName(), killer.getDisplayName())), this, false);
+			player.sendMessage(ChatColor.RED + "You have died.");
+
+			PlayerStats stats = PlayerStats.getStats(player);
+			if (stats != null)
+			{
+				stats.addDeath();
+
+			}
+
+			Player killer = DamageTracker.get(player);
+			if (killer != null)
+			{
+				killer.setLevel(killer.getLevel() + 2);
+				stats = PlayerStats.getStats(killer);
+				if (stats != null)
+				{
+					stats.addKill();
+					stats.addPoints(5);
+				}
+				Msg.msgGame(ChatUtils.format(String.format("&c%s &ehas been killed by &c%s", player.getDisplayName(), killer.getDisplayName())), this, false);
+			}
+			else
+			{
+				Msg.msgGame(ChatUtils.format(String.format("&c%s &ehas been killed!", player.getDisplayName())), this, false);
+			}
+
 		}
 
 		DamageTracker.remove(player);
@@ -216,19 +306,29 @@ public class GameInstance
 			deathmatch();
 		}
 
+		gameSign.update();
+
+		compassMenu.update();
+
+		PlayerStats stats = PlayerStats.getStats(player);
+		if (stats != null)
+		{
+			stats.update();
+		}
 	}
 
-	public void removePlayer(Player player)
+	public void removePlayer(final Player player)
 	{
 		if (player.getGameMode() == GameMode.SURVIVAL)
 		{
 			playerDeath(player);
 		}
 
-		Meta.removeMetadata(player, "game");
 		ItemCompass.remove(player);
 		remaining.remove(player);
 		spectators.remove(player);
+
+		//scoreboard.removeGhost(player);
 
 		World mainWorld = Bukkit.getWorlds().get(0);
 		player.teleport(mainWorld.getSpawnLocation());
@@ -246,8 +346,20 @@ public class GameInstance
 			player.removePotionEffect(effect.getType());
 		}
 
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				if (player.isOnline())
+				{
+					VotingMapRenderer.sendToPlayer(player);
+				}
+			}
+
+		}.runTaskLater(SGMain.getPlugin(), 40);
+
 		player.updateInventory();
-		VotingMapRenderer.sendToPlayer(player);
 	}
 
 	public Crates getCrates()
@@ -263,6 +375,7 @@ public class GameInstance
 	public void setGameState(GameState state)
 	{
 		this.state = state;
+		gameSign.update();
 	}
 
 	public void startMatch()
@@ -285,8 +398,8 @@ public class GameInstance
 		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
 		setGameState(GameState.DEATHMATCH);
 		WorldBorder border = arena.getWorld().getWorldBorder();
-		border.setDamageAmount(4.0);
-		border.setSize(60, 90);
+		border.setDamageAmount(1.0);
+		border.setSize(60, 120);
 	}
 
 	public void ending()
@@ -298,12 +411,28 @@ public class GameInstance
 
 		if (remaining.size() == 1)
 		{
-			Player winner = remaining.get(0);
+			winner = remaining.get(0);
 			Msg.msgGame(ChatUtils.center(ChatColor.GREEN + winner.getDisplayName() + ChatColor.AQUA + " has won the game!"), this, false);
+
+			PlayerStats stats = PlayerStats.getStats(winner);
+			if (stats != null)
+			{
+				stats.addWin();
+				stats.addPoints(25);
+			}
+			System.out.println("Player Stats");
 
 			new FireworksTask(winner);
 		}
 		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
+
+		Consumer.queue(new UpdateGameQuery(this));
+
+	}
+
+	public Player getWinner()
+	{
+		return winner;
 	}
 
 	public void end()
@@ -315,14 +444,22 @@ public class GameInstance
 			removePlayer(player);
 		}
 
+		crates.clear();
 		arena.dispose();
+		scoreboard.dispose();
+		spectators.clear();
+		remaining.clear();
+		setGameState(GameState.ENDED);
 
+		compassMenu.dispose();
+		gameSign.check();
 	}
 
 	public void start()
 	{
 		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
 		Msg.msgGame(ChatColor.GOLD + ChatUtils.center("<>  Starting  <>"), this, false);
+		Msg.msgGame(ChatColor.GOLD + ChatUtils.center(arena.getArenaName()), this, false);
 		Msg.msgGame(ChatColor.YELLOW + ChatUtils.fill("-"), this, false);
 		new TeleportTask(remaining, arena.getSpawns());
 		setGameState(GameState.STARTING);

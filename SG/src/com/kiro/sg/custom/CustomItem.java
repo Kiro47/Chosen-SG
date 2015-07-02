@@ -27,6 +27,7 @@ public abstract class CustomItem
 		ITEMS.add(new ItemCarePackage());
 		ITEMS.add(new ItemSlowball());
 		ITEMS.add(new ItemCompass());
+		ITEMS.add(new ItemExpBottle());
 	}
 
 	public static CustomItem checkForItem(ItemStack stack)

@@ -2,6 +2,7 @@ package com.kiro.sg.game;
 
 import com.kiro.sg.SGMain;
 import com.kiro.sg.config.Config;
+import com.kiro.sg.game.arena.ArenaAttributes;
 import com.kiro.sg.game.arena.SGArena;
 import com.kiro.sg.utils.chat.ChatUtils;
 import com.kiro.sg.utils.chat.Msg;
@@ -20,11 +21,15 @@ public class GameRunner extends BukkitRunnable
 	private int chestRefillTimer;
 	private int dayNightDriver;
 
+	private ArenaAttributes.TimeCycle timeCycle;
+
 	public GameRunner(GameInstance instance)
 	{
 		gameInstance = instance;
 		timer = 1;
 		dayNightDriver = 0;
+
+		timeCycle = instance.getArena().getAttributes().timeCycle();
 
 		runTaskTimer(SGMain.getPlugin(), 20, 20);
 	}
@@ -42,19 +47,24 @@ public class GameRunner extends BukkitRunnable
 	@Override
 	public void run()
 	{
-		if (!gameInstance.foreverNight)
+
+		switch (timeCycle)
 		{
-			dayNightDriver += 80;
-			if (dayNightDriver >= 24000)
-			{
-				dayNightDriver = 0;
-			}
-			gameInstance.getArena().getWorld().setTime(dayNightDriver);
+			case ALL_NIGHT:
+				dayNightDriver = 17000;
+				break;
+			case ALL_DAY:
+				dayNightDriver = 5000;
+				break;
+			case NORMAL:
+				dayNightDriver += 80;
+				if (dayNightDriver >= 24000)
+				{
+					dayNightDriver = 0;
+				}
 		}
-		else
-		{
-			gameInstance.getArena().getWorld().setTime(17000);
-		}
+
+		gameInstance.getArena().getWorld().setTime(dayNightDriver);
 
 		timer--;
 		gameInstance.getScoreboard().updateTimer(gameInstance.getState(), timer);
@@ -63,7 +73,7 @@ public class GameRunner extends BukkitRunnable
 		{
 			Msg.msgGame(ChatUtils.center(ChatColor.RED + "The chests have been refilled!"), gameInstance, false);
 
-			gameInstance.getCrates().refillCrates();
+			gameInstance.getCrates().clear();
 			chestRefillTimer = 0;
 		}
 		if (gameInstance.getState() == GameState.INIT)
@@ -167,6 +177,5 @@ public class GameRunner extends BukkitRunnable
 				gameInstance.end();
 			}
 		}
-
 	}
 }

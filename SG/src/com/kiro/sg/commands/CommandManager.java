@@ -31,6 +31,9 @@ public class CommandManager implements CommandExecutor
 		cmds.add(new SetCenter());
 		cmds.add(new CloseArena());
 		cmds.add(new NewVote());
+		cmds.add(new AddSign());
+		cmds.add(new StatsCommand());
+		cmds.add(new AddTop());
 	}
 
 	@Override

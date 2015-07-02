@@ -15,13 +15,13 @@ public class Crates
 		crateMap = new HashMap<>();
 	}
 
-	public SupplyCrate getCrate(Location location)
+	public SupplyCrate getCrate(Location location, int mod)
 	{
 		SupplyCrate crate = crateMap.get(location);
 		if (crate == null)
 		{
 			crate = new SupplyCrate();
-			crate.populate();
+			crate.populate(mod);
 
 			crateMap.put(location, crate);
 		}
@@ -30,7 +30,7 @@ public class Crates
 	}
 
 
-	public void refillCrates()
+	public void clear()
 	{
 		crateMap.clear();
 	}

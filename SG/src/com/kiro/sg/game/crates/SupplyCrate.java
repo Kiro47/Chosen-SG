@@ -15,14 +15,9 @@ public class SupplyCrate implements InventoryHolder
 		inventory = Bukkit.createInventory(this, 9, "Supply Crate");
 	}
 
-	public void populate()
-	{
-		inventory.setContents(CrateUtils.createContents(9));
-	}
-
 	public void populate(int mod)
 	{
-		inventory.setContents(CrateUtils.createContents(9));
+		inventory.setContents(CrateUtils.createContents(9, mod));
 	}
 
 	public void open(Player player)
