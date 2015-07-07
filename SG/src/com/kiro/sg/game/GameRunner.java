@@ -64,6 +64,7 @@ public class GameRunner extends BukkitRunnable
 				}
 		}
 
+
 		gameInstance.getArena().getWorld().setTime(dayNightDriver);
 
 		timer--;
@@ -75,6 +76,8 @@ public class GameRunner extends BukkitRunnable
 
 			gameInstance.getCrates().clear();
 			chestRefillTimer = 0;
+
+			gameInstance.getScoreboard().chestRefill(Config.TIMER_CHEST_REFILL - chestRefillTimer);
 		}
 		if (gameInstance.getState() == GameState.INIT)
 		{
@@ -124,6 +127,12 @@ public class GameRunner extends BukkitRunnable
 			}
 			else
 			{
+
+				if (timer % 20 * 60 * 5 == 0)
+				{
+					gameInstance.executeSmartSponsor();
+				}
+
 				if (timer == Config.TIMER_GAME_MAX_TIME - 1)
 				{
 					for (Player player : gameInstance.getRemaining())

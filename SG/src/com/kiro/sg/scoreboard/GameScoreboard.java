@@ -48,6 +48,11 @@ public class GameScoreboard
 		}
 	}
 
+	public void chestRefill(int time)
+	{
+		sidebar.getScore(ChatColor.GREEN + "Chest Refill").setScore(time);
+	}
+
 	public void setGhosts(Player player)
 	{
 		player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 100000, 1));

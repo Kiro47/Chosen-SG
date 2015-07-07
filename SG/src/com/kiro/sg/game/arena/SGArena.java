@@ -1,5 +1,6 @@
 package com.kiro.sg.game.arena;
 
+import com.kiro.sg.SGMain;
 import com.kiro.sg.config.Config;
 import com.kiro.sg.utils.CleanWorldGenerator;
 import com.kiro.sg.utils.misc.FileUtils;
@@ -128,14 +129,22 @@ public class SGArena
 		{
 			player.teleport(location);
 		}
-		if (Bukkit.unloadWorld(getWorld(), false))
+		Bukkit.getScheduler().runTaskLater(SGMain.getPlugin(), new Runnable()
 		{
-			FileUtils.deleteFolder(getWorldInUseFolder());
-		}
-		else
-		{
-			System.out.println("Couldn't Unload World! " + world.getName());
-		}
+			@Override
+			public void run()
+			{
+				if (Bukkit.unloadWorld(getWorld(), false))
+				{
+					FileUtils.deleteFolder(getWorldInUseFolder());
+				}
+				else
+				{
+					System.out.println("Couldn't Unload World! " + world.getName());
+				}
+			}
+		}, 1);
+
 		spawnPoints.clear();
 		cornChests.clear();
 	}

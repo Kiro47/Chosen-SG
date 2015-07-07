@@ -14,6 +14,7 @@ import com.kiro.sg.mysql.query.queries.AddGameQuery;
 import com.kiro.sg.mysql.query.queries.GetInsertIndex;
 import com.kiro.sg.mysql.query.queries.UpdateGameQuery;
 import com.kiro.sg.scoreboard.GameScoreboard;
+import com.kiro.sg.sponsor.SmartSponsor;
 import com.kiro.sg.utils.LastIDable;
 import com.kiro.sg.utils.Meta;
 import com.kiro.sg.utils.chat.ChatUtils;
@@ -104,6 +105,14 @@ public class GameInstance implements LastIDable
 		Consumer.queue(new AddGameQuery(this));
 		Consumer.queue(new GetInsertIndex(this));
 		gameRunner = new GameRunner(this);
+	}
+
+	public void executeSmartSponsor()
+	{
+		for (Player player : remaining)
+		{
+			SmartSponsor.sponsor(player);
+		}
 	}
 
 	public List<Player> getRemaining()
