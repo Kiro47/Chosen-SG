@@ -1,7 +1,12 @@
 package com.kiro.sg.utils.misc;
 
+import net.minecraft.server.v1_8_R3.NBTBase;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagEnd;
+import net.minecraft.server.v1_8_R3.NBTTagList;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -9,11 +14,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public final class ItemUtils
 {
 
 	private static final List<Material> DOOR_LIST;
+	private static final Pattern COMPILE = Pattern.compile("(\\\"?\\:\\\"?)");
+	private static final Pattern PATTERN = Pattern.compile(",}", Pattern.LITERAL);
 
 	static
 	{
@@ -136,6 +145,62 @@ public final class ItemUtils
 		stack.setItemMeta(meta);
 
 		return stack;
+	}
+
+	public static String toJSON(ItemStack stack)
+	{
+		NBTTagCompound nbt = new NBTTagCompound();
+		CraftItemStack.asNMSCopy(stack).save(nbt);
+		//
+		//		StringBuilder builder = new StringBuilder();
+		//		parseCompound(builder, nbt);
+		//
+		//
+		//		//		s = s.replace("{", "{\"");
+		//		//		s = s.replace(",", "\",\"");
+		//		//		s = COMPILE.matcher(s).replaceAll("\":\"");
+		//		//		s = s.replace("\"{", "{");
+		//		//		s = s.replace("\"\",", "\",");
+		//		//		s = s.replace("}", "\"}");
+		//		//		s = s.replace("minecraft\":\"", "minecraft:");
+		//		return PATTERN.matcher(builder.toString()).replaceAll("}");
+
+		return nbt.toString().replace("\"", "\\\"");
+	}
+
+	private static void parseCompound(StringBuilder sb, NBTTagCompound nbt)
+	{
+		sb.append('{');
+		Set<String> keys = nbt.c();
+		for (String key : keys)
+		{
+			sb.append('"').append(key).append("\":");
+			NBTBase base = nbt.get(key);
+			if (base instanceof NBTTagList)
+			{
+				sb.append('{');
+				NBTTagList list = (NBTTagList) base;
+				int size = list.size();
+				for (int i = 0; i < size; i++)
+				{
+					parseCompound(sb, list.get(i));
+					sb.append(',');
+				}
+				sb.append('}');
+			}
+			else if (base instanceof NBTTagCompound)
+			{
+				parseCompound(sb, (NBTTagCompound) base);
+			}
+			else if (!(base instanceof NBTTagEnd))
+			{
+				sb.append('"');
+				sb.append(base.toString().replace("\"", ""));
+				sb.append("\",");
+			}
+		}
+		sb.append('}');
+
 	}
 
 

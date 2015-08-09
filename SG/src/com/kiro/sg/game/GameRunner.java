@@ -21,7 +21,7 @@ public class GameRunner extends BukkitRunnable
 	private int chestRefillTimer;
 	private int dayNightDriver;
 
-	private ArenaAttributes.TimeCycle timeCycle;
+	private final ArenaAttributes.TimeCycle timeCycle;
 
 	public GameRunner(GameInstance instance)
 	{
@@ -128,7 +128,8 @@ public class GameRunner extends BukkitRunnable
 			else
 			{
 
-				if (timer % 20 * 60 * 5 == 0)
+				if (timer % (60 * 5) == 0)
+				//if (timer % 20 * 60 == 0)
 				{
 					gameInstance.executeSmartSponsor();
 				}

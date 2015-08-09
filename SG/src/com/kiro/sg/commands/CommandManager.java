@@ -34,6 +34,7 @@ public class CommandManager implements CommandExecutor
 		cmds.add(new AddSign());
 		cmds.add(new StatsCommand());
 		cmds.add(new AddTop());
+		cmds.add(new SponsorCommand());
 	}
 
 	@Override

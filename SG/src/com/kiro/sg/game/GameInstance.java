@@ -14,7 +14,8 @@ import com.kiro.sg.mysql.query.queries.AddGameQuery;
 import com.kiro.sg.mysql.query.queries.GetInsertIndex;
 import com.kiro.sg.mysql.query.queries.UpdateGameQuery;
 import com.kiro.sg.scoreboard.GameScoreboard;
-import com.kiro.sg.sponsor.SmartSponsor;
+import com.kiro.sg.sponsor.menu.SponsorMenu;
+import com.kiro.sg.sponsor.smart.SmartSponsor;
 import com.kiro.sg.utils.LastIDable;
 import com.kiro.sg.utils.Meta;
 import com.kiro.sg.utils.chat.ChatUtils;
@@ -161,6 +162,7 @@ public class GameInstance implements LastIDable
 					player.showPlayer(p);
 				}
 			}
+			scoreboard.addLiving(player);
 
 			player.setLevel(0);
 			player.setGameMode(GameMode.SURVIVAL);
@@ -201,6 +203,7 @@ public class GameInstance implements LastIDable
 		remaining.remove(player);
 		spectators.add(player);
 
+		scoreboard.removeLiving(player);
 		scoreboard.updatePlayers(remaining.size());
 
 
@@ -229,6 +232,7 @@ public class GameInstance implements LastIDable
 		player.updateInventory();
 
 		player.getInventory().setItem(0, CompassMenu.getCompassItem());
+		player.getInventory().setItem(4, SponsorMenu.SPONSOR_ITEM);
 		player.getInventory().setItem(8, ItemUtils.nameItem(new ItemStack(Material.BED), ChatUtils.format("&4Leave Game!")));
 
 
@@ -250,7 +254,6 @@ public class GameInstance implements LastIDable
 			if (stats != null)
 			{
 				stats.addDeath();
-
 			}
 
 			Player killer = DamageTracker.get(player);
@@ -336,6 +339,7 @@ public class GameInstance implements LastIDable
 		ItemCompass.remove(player);
 		remaining.remove(player);
 		spectators.remove(player);
+		scoreboard.removeLiving(player);
 
 		//scoreboard.removeGhost(player);
 
@@ -369,6 +373,8 @@ public class GameInstance implements LastIDable
 		}.runTaskLater(SGMain.getPlugin(), 40);
 
 		player.updateInventory();
+
+		Meta.removeMetadata(player, "game");
 	}
 
 	public Crates getCrates()
@@ -455,7 +461,6 @@ public class GameInstance implements LastIDable
 
 		crates.clear();
 		arena.dispose();
-		scoreboard.dispose();
 		spectators.clear();
 		remaining.clear();
 		setGameState(GameState.ENDED);

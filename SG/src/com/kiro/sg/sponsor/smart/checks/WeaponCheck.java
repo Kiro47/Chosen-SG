@@ -1,6 +1,6 @@
-package com.kiro.sg.sponsor.checks;
+package com.kiro.sg.sponsor.smart.checks;
 
-import com.kiro.sg.sponsor.SponsorCheck;
+import com.kiro.sg.sponsor.smart.SponsorCheck;
 import com.kiro.sg.utils.chat.Msg;
 import com.kiro.sg.utils.misc.ItemUtils;
 import org.bukkit.ChatColor;
@@ -65,11 +65,13 @@ public class WeaponCheck implements SponsorCheck
 
 			player.getInventory().addItem(stack);
 			Msg.msgPlayer(player, ChatColor.DARK_GREEN + "you have been given a " + ChatColor.GREEN + "Portal Workbench");
+			return true;
 		}
 		else if (hasType && !hasStick)
 		{
 			player.getInventory().addItem(new ItemStack(Material.STICK, 1));
 			Msg.msgPlayer(player, ChatColor.DARK_GREEN + "you have been given a " + ChatColor.GREEN + "Stick");
+			return true;
 		}
 		else if (material != null && hasStick)
 		{
@@ -82,6 +84,7 @@ public class WeaponCheck implements SponsorCheck
 			{
 				Msg.msgPlayer(player, ChatColor.DARK_GREEN + "you have been given an " + ChatColor.GREEN + "Iron Ingot");
 			}
+			return true;
 		}
 
 		return false;

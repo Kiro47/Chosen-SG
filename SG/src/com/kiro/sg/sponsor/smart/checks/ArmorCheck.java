@@ -1,6 +1,6 @@
-package com.kiro.sg.sponsor.checks;
+package com.kiro.sg.sponsor.smart.checks;
 
-import com.kiro.sg.sponsor.SponsorCheck;
+import com.kiro.sg.sponsor.smart.SponsorCheck;
 import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,25 +21,25 @@ public class ArmorCheck implements SponsorCheck
 	public boolean checkAndExecute(Player player)
 	{
 		PlayerInventory inventory = player.getInventory();
-		if (inventory.getHelmet().getType() != Material.IRON_HELMET)
+		if (inventory.getHelmet() == null || inventory.getHelmet().getType() != Material.IRON_HELMET)
 		{
 			inventory.addItem(new ItemStack(Material.IRON_HELMET));
 			Msg.msgPlayer(player, ChatColor.DARK_GREEN + "you have been given an " + ChatColor.GREEN + "Iron Helmet");
 			return true;
 		}
-		if (inventory.getBoots().getType() != Material.IRON_BOOTS)
+		if (inventory.getBoots() == null || inventory.getBoots().getType() != Material.IRON_BOOTS)
 		{
 			inventory.addItem(new ItemStack(Material.IRON_BOOTS));
 			Msg.msgPlayer(player, ChatColor.DARK_GREEN + "you have been given " + ChatColor.GREEN + "Iron Boots");
 			return true;
 		}
-		if (inventory.getLeggings().getType() != Material.IRON_LEGGINGS)
+		if (inventory.getLeggings() == null || inventory.getLeggings().getType() != Material.IRON_LEGGINGS)
 		{
 			inventory.addItem(new ItemStack(Material.IRON_LEGGINGS));
 			Msg.msgPlayer(player, ChatColor.DARK_GREEN + "you have been given " + ChatColor.GREEN + "Iron Leggings");
 			return true;
 		}
-		if (inventory.getChestplate().getType() != Material.IRON_CHESTPLATE)
+		if (inventory.getChestplate() == null || inventory.getChestplate().getType() != Material.IRON_CHESTPLATE)
 		{
 			inventory.addItem(new ItemStack(Material.IRON_CHESTPLATE));
 			Msg.msgPlayer(player, ChatColor.DARK_GREEN + "you have been given an " + ChatColor.GREEN + "Iron Chestplate");

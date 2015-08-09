@@ -1,4 +1,4 @@
-package com.kiro.sg.sponsor;
+package com.kiro.sg.sponsor.smart;
 
 import org.bukkit.entity.Player;
 

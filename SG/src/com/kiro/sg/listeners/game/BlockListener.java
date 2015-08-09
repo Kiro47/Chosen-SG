@@ -10,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class BlockListener implements Listener
@@ -50,6 +52,7 @@ public class BlockListener implements Listener
 	public void onExplosion(BlockExplodeEvent event)
 	{
 		event.setCancelled(true);
+		event.setYield(0.0f);
 		for (Block block : event.blockList())
 		{
 			if (block.getType() == Material.CHEST)
@@ -58,6 +61,12 @@ public class BlockListener implements Listener
 			}
 
 		}
+	}
+
+	@EventHandler
+	public void onEntitySpawn(CreatureSpawnEvent event)
+	{
+		event.setCancelled(true);
 	}
 
 	@EventHandler
@@ -102,5 +111,11 @@ public class BlockListener implements Listener
 			}
 		}
 
+	}
+
+	@EventHandler
+	public void onDecay(LeavesDecayEvent event)
+	{
+		event.setCancelled(true);
 	}
 }

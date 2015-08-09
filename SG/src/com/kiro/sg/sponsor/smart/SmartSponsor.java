@@ -1,9 +1,9 @@
-package com.kiro.sg.sponsor;
+package com.kiro.sg.sponsor.smart;
 
-import com.kiro.sg.sponsor.checks.ArmorCheck;
-import com.kiro.sg.sponsor.checks.DefaultCheck;
-import com.kiro.sg.sponsor.checks.HungerCheck;
-import com.kiro.sg.sponsor.checks.WeaponCheck;
+import com.kiro.sg.sponsor.smart.checks.ArmorCheck;
+import com.kiro.sg.sponsor.smart.checks.DefaultCheck;
+import com.kiro.sg.sponsor.smart.checks.HungerCheck;
+import com.kiro.sg.sponsor.smart.checks.WeaponCheck;
 import com.kiro.sg.utils.chat.ChatUtils;
 import com.kiro.sg.utils.chat.Msg;
 import org.bukkit.ChatColor;
@@ -25,10 +25,16 @@ public final class SmartSponsor
 	static
 	{
 		int weightSum = 0;
-		checks.add(new DefaultCheck());
-		checks.add(new ArmorCheck());
-		checks.add(new WeaponCheck());
-		checks.add(new HungerCheck());
+
+		SponsorCheck check;
+		checks.add(check = new DefaultCheck());
+		weightSum += check.weight();
+		checks.add(check = new ArmorCheck());
+		weightSum += check.weight();
+		checks.add(check = new WeaponCheck());
+		weightSum += check.weight();
+		checks.add(check = new HungerCheck());
+		weightSum += check.weight();
 
 		indecies = new int[weightSum];
 		int cur = 0;
@@ -71,7 +77,7 @@ public final class SmartSponsor
 			}
 			check = null;
 		}
-		while (check == null && !check.checkAndExecute(player));
+		while (check == null || !check.checkAndExecute(player));
 
 
 		Msg.msgPlayer(player, ChatColor.GOLD + BORDER_FILL);

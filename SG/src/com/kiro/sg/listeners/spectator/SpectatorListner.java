@@ -5,6 +5,7 @@ import com.kiro.sg.custom.items.ItemCompass;
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.game.GameManager;
 import com.kiro.sg.game.spectators.CompassMenu;
+import com.kiro.sg.sponsor.menu.SponsorMenu;
 import com.kiro.sg.utils.chat.Msg;
 import com.kiro.sg.utils.misc.EventUtils;
 import com.kiro.sg.utils.misc.ItemUtils;
@@ -16,6 +17,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -148,6 +150,7 @@ public class SpectatorListner implements Listener
 						CompassMenu menu = instance.getCompassMenu();
 						menu.onOpen(event.getPlayer());
 					}
+
 				}
 				else if (stack.getType() == Material.BED)
 				{
@@ -156,6 +159,17 @@ public class SpectatorListner implements Listener
 					{
 						instance.removePlayer(event.getPlayer());
 						Msg.msgPlayer(event.getPlayer(), ChatColor.DARK_GREEN + "You have left the game!");
+					}
+
+				}
+				else if (stack.getType() == Material.COOKIE)
+				{
+					GameInstance instance = GameManager.getInstance(event.getPlayer());
+					if (instance != null)
+					{
+						event.setCancelled(true);
+						event.setUseItemInHand(Event.Result.DENY);
+						SponsorMenu.displayPlayerChoiceMenu(instance, event.getPlayer());
 					}
 				}
 			}

@@ -1,6 +1,6 @@
-package com.kiro.sg.sponsor.checks;
+package com.kiro.sg.sponsor.smart.checks;
 
-import com.kiro.sg.sponsor.SponsorCheck;
+import com.kiro.sg.sponsor.smart.SponsorCheck;
 import com.kiro.sg.utils.chat.Msg;
 import com.kiro.sg.utils.misc.ItemUtils;
 import org.bukkit.ChatColor;

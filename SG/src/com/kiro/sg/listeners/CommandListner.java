@@ -69,10 +69,15 @@ public class CommandListner implements Listener
 			{
 				player.sendMessage(ChatColor.RED + "I don't know what happened, you don't seem to have stats.");
 			}
+			event.setCancelled(true);
 		}
 		else if (msg.startsWith("/stats"))
 		{
 			event.setMessage("/sg stats");
+		}
+		else if (msg.startsWith("/sponsor"))
+		{
+			event.setMessage("/sg sp");
 		}
 	}
 

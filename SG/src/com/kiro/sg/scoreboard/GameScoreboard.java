@@ -18,6 +18,7 @@ public class GameScoreboard
 	private final Objective sidebar;
 
 	private final Team ghosts;
+	private final Team living;
 
 	public GameScoreboard()
 	{
@@ -28,6 +29,9 @@ public class GameScoreboard
 		ghosts = scoreboard.registerNewTeam("ghosts");
 		ghosts.setCanSeeFriendlyInvisibles(true);
 		ghosts.setPrefix(ChatColor.DARK_GREEN.toString());
+
+		living = scoreboard.registerNewTeam("living");
+		living.setCanSeeFriendlyInvisibles(true);
 	}
 
 	public Scoreboard getScoreboard()
@@ -51,6 +55,16 @@ public class GameScoreboard
 	public void chestRefill(int time)
 	{
 		sidebar.getScore(ChatColor.GREEN + "Chest Refill").setScore(time);
+	}
+
+	public void addLiving(Player player)
+	{
+		living.addPlayer(player);
+	}
+
+	public void removeLiving(Player player)
+	{
+		living.removePlayer(player);
 	}
 
 	public void setGhosts(Player player)
