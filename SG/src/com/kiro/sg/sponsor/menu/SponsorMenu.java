@@ -102,7 +102,6 @@ public class SponsorMenu implements Listener
 		for (int i = 0; i < SponsorItems.length; i++)
 		{
 			SponsorItemDisplays[i] = ItemUtils.toJSON(SponsorItems[i]);
-			System.out.println(SponsorItemDisplays[i]);
 		}
 	}
 
@@ -252,7 +251,7 @@ public class SponsorMenu implements Listener
 		}
 		else
 		{
-			player.sendMessage(ChatColor.RED + "Sorry, You can't afford this item.");
+			sponsor.sendMessage(ChatColor.RED + "Sorry, You can't afford this item.");
 		}
 	}
 

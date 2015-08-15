@@ -142,6 +142,7 @@ public class LobbyManager
 
 			GameInstance gameInstance = new GameInstance(players, arena);
 
+
 			gameInstance.init();
 			Voting.reset();
 

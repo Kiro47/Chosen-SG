@@ -83,6 +83,8 @@ public class GameInstance implements LastIDable
 		state = GameState.INIT;
 		GameSign.setGame(this);
 		compassMenu = new CompassMenu(this);
+
+		this.arena.setGameInstance(this);
 	}
 
 	public SGArena getArena()
@@ -92,8 +94,23 @@ public class GameInstance implements LastIDable
 
 	public void init()
 	{
+		System.out.println("Game Init");
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				arena.prepareLoad();
+			}
+
+		}.runTaskAsynchronously(SGMain.getPlugin());
+	}
+
+	public void init2()
+	{
+
+		System.out.println("Game Init2");
 		scoreboard = new GameScoreboard();
-		arena.loadArena();
 
 		for (Player player : remaining)
 		{
@@ -106,6 +123,7 @@ public class GameInstance implements LastIDable
 		Consumer.queue(new AddGameQuery(this));
 		Consumer.queue(new GetInsertIndex(this));
 		gameRunner = new GameRunner(this);
+
 	}
 
 	public void executeSmartSponsor()
@@ -331,6 +349,11 @@ public class GameInstance implements LastIDable
 
 	public void removePlayer(final Player player)
 	{
+		if (player == null)
+		{
+			return;
+		}
+
 		if (player.getGameMode() == GameMode.SURVIVAL)
 		{
 			playerDeath(player);
@@ -467,6 +490,21 @@ public class GameInstance implements LastIDable
 
 		compassMenu.dispose();
 		gameSign.check();
+
+		new BukkitRunnable()
+		{
+
+			@Override
+			public void run()
+			{
+				World world = Bukkit.getWorlds().get(0);
+				WorldBorder border = world.getWorldBorder();
+				border.setDamageAmount(0.0);
+				border.setDamageBuffer(0);
+				border.setCenter(world.getSpawnLocation());
+				border.setSize(200);
+			}
+		}.runTaskLater(SGMain.getPlugin(), 10);
 	}
 
 	public void start()

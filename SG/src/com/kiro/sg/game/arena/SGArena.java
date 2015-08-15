@@ -2,6 +2,7 @@ package com.kiro.sg.game.arena;
 
 import com.kiro.sg.SGMain;
 import com.kiro.sg.config.Config;
+import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.utils.CleanWorldGenerator;
 import com.kiro.sg.utils.misc.FileUtils;
 import org.bukkit.Bukkit;
@@ -11,8 +12,10 @@ import org.bukkit.WorldCreator;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,11 +42,18 @@ public class SGArena
 
 	private ArenaAttributes attributes;
 
+	private GameInstance gameInstance;
+
 	public SGArena(String arenaName, String worldName)
 	{
 		this.arenaName = arenaName;
 		this.worldName = worldName;
 		arenaID = WorldIndex++;
+	}
+
+	public void setGameInstance(GameInstance gameInstance)
+	{
+		this.gameInstance = gameInstance;
 	}
 
 	public SGArena(String arenaName)
@@ -101,13 +111,20 @@ public class SGArena
 	/**
 	 * generates the world.
 	 */
-	public void createWorld()
+	public void createWorld(boolean copy)
 	{
 		try
 		{
+			if (copy)
+			{
+				System.out.println("Create World: " + getWorldInUseFolder().getName());
 
-			System.out.println("Create World: " + getWorldInUseFolder().getName());
-			FileUtils.copyFolder(new File(Config.ArenaWorldFolder, worldName), getWorldInUseFolder());
+				long time = System.currentTimeMillis();
+
+				FileUtils.copyFolder(new File(Config.ArenaWorldFolder, worldName), getWorldInUseFolder());
+
+				System.out.println(System.currentTimeMillis() - time + "ms copy time");
+			}
 
 			WorldCreator wc = WorldCreator.name(getWorldInUseFolder().getName());
 			wc.generator(new CleanWorldGenerator(0, 0));
@@ -149,18 +166,44 @@ public class SGArena
 		cornChests.clear();
 	}
 
-	/**
-	 * Loads the arena data as well as generates the world.
-	 */
-	public void loadArena()
+	public void prepareLoad()
 	{
+
+		System.out.println("prepareLoad()");
 		try
 		{
-			YamlConfiguration config = YamlConfiguration.loadConfiguration(getArenaFileLocation());
+			final YamlConfiguration config = YamlConfiguration.loadConfiguration(getArenaFileLocation());
 			arenaName = config.getString("arenaName");
 			worldName = config.getString("worldName");
 
-			createWorld();
+			FileUtils.copyFolder(new File(Config.ArenaWorldFolder, worldName), getWorldInUseFolder());
+
+			new BukkitRunnable()
+			{
+				@Override
+				public void run()
+				{
+					loadArena(config);
+					gameInstance.init2();
+				}
+
+			}.runTask(SGMain.getPlugin());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Loads the arena data as well as generates the world.
+	 */
+	public void loadArena(YamlConfiguration config)
+	{
+		try
+		{
+			System.out.println("loadArena()");
+			createWorld(false);
 
 			centerPoint = Config.getLocation(config.getConfigurationSection("center"), world);
 

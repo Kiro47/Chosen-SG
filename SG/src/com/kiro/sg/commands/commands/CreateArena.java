@@ -34,7 +34,7 @@ public class CreateArena extends GameCommand
 		String arenaName = builder.toString().trim();
 
 		SGArena arena = new SGArena(arenaName, worldName);
-		arena.createWorld();
+		arena.createWorld(true);
 
 		World world = arena.getWorld();
 		p.setGameMode(GameMode.CREATIVE);
