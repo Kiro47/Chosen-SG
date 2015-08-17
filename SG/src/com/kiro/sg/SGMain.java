@@ -12,7 +12,10 @@ import com.kiro.sg.listeners.game.BlockListener;
 import com.kiro.sg.listeners.game.CrateListener;
 import com.kiro.sg.listeners.game.CustomItemsListener;
 import com.kiro.sg.listeners.game.PlayerMove;
-import com.kiro.sg.listeners.lobby.*;
+import com.kiro.sg.listeners.lobby.LobbyListener;
+import com.kiro.sg.listeners.lobby.LoginListener;
+import com.kiro.sg.listeners.lobby.PlayerLeaveArena;
+import com.kiro.sg.listeners.lobby.StatusSignListener;
 import com.kiro.sg.listeners.spectator.SpectatorListner;
 import com.kiro.sg.listeners.spectator.SpectatorMenuListener;
 import com.kiro.sg.lobby.GameSign;
@@ -23,7 +26,9 @@ import com.kiro.sg.mysql.Consumer;
 import com.kiro.sg.mysql.MySQL;
 import com.kiro.sg.utils.Meta;
 import com.kiro.sg.utils.chat.ChatUtils;
+import com.kiro.sg.nms.BorderUtils;
 import com.kiro.sg.utils.misc.FileUtils;
+import com.kiro.sg.nms.ReflectionUtils;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -86,7 +91,11 @@ public class SGMain extends JavaPlugin
 
 		lobbyManager = new LobbyManager();
 
+		ReflectionUtils.getVersion();
+		BorderUtils.init();
 		World world = Bukkit.getWorlds().get(0);
+		BorderUtils.assignNew(world);
+
 		WorldBorder border = world.getWorldBorder();
 		border.setDamageAmount(0.0);
 		border.setDamageBuffer(0);

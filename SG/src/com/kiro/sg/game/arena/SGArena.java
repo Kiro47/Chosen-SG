@@ -4,6 +4,7 @@ import com.kiro.sg.SGMain;
 import com.kiro.sg.config.Config;
 import com.kiro.sg.game.GameInstance;
 import com.kiro.sg.utils.CleanWorldGenerator;
+import com.kiro.sg.nms.BorderUtils;
 import com.kiro.sg.utils.misc.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -131,6 +132,8 @@ public class SGArena
 
 			world = wc.createWorld();
 			world.setAutoSave(false);
+
+			BorderUtils.assignNew(world);
 
 		}
 		catch (Exception e)
