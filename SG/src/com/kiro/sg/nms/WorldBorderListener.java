@@ -1,18 +1,18 @@
 package com.kiro.sg.nms;
 
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.IWorldBorderListener;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldBorder;
+import net.minecraft.server.v1_8_R3.WorldBorder;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public class WorldBorderListener implements IWorldBorderListener
 {
-	private final World nmsWorld;
-	private final WorldBorder worldBorder;
-	private final org.bukkit.World world;
+	private final World world;
 
-	public WorldBorderListener(org.bukkit.World world, WorldBorder worldBorder)
+	public WorldBorderListener(World world)
 	{
-		nmsWorld = (World) ReflectionUtils.getNMS(world);
-		this.worldBorder = worldBorder;
 		this.world = world;
 	}
 
@@ -24,7 +24,7 @@ public class WorldBorderListener implements IWorldBorderListener
 
 		for (Player player : world.getPlayers())
 		{
-			((EntityPlayer) ReflectionUtils.getNMS(player)).playerConnection.sendPacket(packet);
+			((EntityPlayer) RefUtils.getNMS(player)).playerConnection.sendPacket(packet);
 		}
 
 	}
@@ -37,7 +37,7 @@ public class WorldBorderListener implements IWorldBorderListener
 
 		for (Player player : world.getPlayers())
 		{
-			((EntityPlayer) ReflectionUtils.getNMS(player)).playerConnection.sendPacket(packet);
+			((EntityPlayer) RefUtils.getNMS(player)).playerConnection.sendPacket(packet);
 		}
 	}
 
@@ -49,7 +49,7 @@ public class WorldBorderListener implements IWorldBorderListener
 
 		for (Player player : world.getPlayers())
 		{
-			((EntityPlayer) ReflectionUtils.getNMS(player)).playerConnection.sendPacket(packet);
+			((EntityPlayer) RefUtils.getNMS(player)).playerConnection.sendPacket(packet);
 		}
 	}
 
@@ -61,7 +61,7 @@ public class WorldBorderListener implements IWorldBorderListener
 
 		for (Player player : world.getPlayers())
 		{
-			((EntityPlayer) ReflectionUtils.getNMS(player)).playerConnection.sendPacket(packet);
+			((EntityPlayer) RefUtils.getNMS(player)).playerConnection.sendPacket(packet);
 		}
 	}
 
@@ -73,7 +73,7 @@ public class WorldBorderListener implements IWorldBorderListener
 
 		for (Player player : world.getPlayers())
 		{
-			((EntityPlayer) ReflectionUtils.getNMS(player)).playerConnection.sendPacket(packet);
+			((EntityPlayer) RefUtils.getNMS(player)).playerConnection.sendPacket(packet);
 		}
 	}
 

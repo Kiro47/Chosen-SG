@@ -18,8 +18,8 @@ public class BorderUtils
 	{
 		try
 		{
-			worldBorder_class = ReflectionUtils.getNMS("WorldBorder");
-			worldBorder_field = ReflectionUtils.findField(ReflectionUtils.getNMS("World"), worldBorder_class);
+			worldBorder_class = RefUtils.getNMS("WorldBorder");
+			worldBorder_field = RefUtils.findField(RefUtils.getNMS("World"), worldBorder_class);
 			worldBorder_field.setAccessible(true);
 			Field modifiersField = Field.class.getDeclaredField("modifiers");
 			modifiersField.setAccessible(true);
@@ -42,13 +42,13 @@ public class BorderUtils
 	{
 		try
 		{
-			final Object handle = ReflectionUtils.getNMS(world);
+			final Object handle = RefUtils.getNMS(world);
 
 			Object wb = worldBorder_class.newInstance();
 			worldBorder_field.set(handle, wb);
 			wbHandle_field.set(world.getWorldBorder(), wb);
 
-			((WorldBorder) wb).a(new WorldBorderListener(world, (WorldBorder) wb));
+			((WorldBorder) wb).a(new WorldBorderListener(world));
 
 		}
 		catch (Exception e)

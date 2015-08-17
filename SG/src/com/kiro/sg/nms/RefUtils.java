@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class ReflectionUtils
+public class RefUtils
 {
 
 	public static String NMS_VERSION;

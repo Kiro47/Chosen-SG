@@ -28,7 +28,7 @@ import com.kiro.sg.utils.Meta;
 import com.kiro.sg.utils.chat.ChatUtils;
 import com.kiro.sg.nms.BorderUtils;
 import com.kiro.sg.utils.misc.FileUtils;
-import com.kiro.sg.nms.ReflectionUtils;
+import com.kiro.sg.nms.RefUtils;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -91,7 +91,7 @@ public class SGMain extends JavaPlugin
 
 		lobbyManager = new LobbyManager();
 
-		ReflectionUtils.getVersion();
+		RefUtils.getVersion();
 		BorderUtils.init();
 		World world = Bukkit.getWorlds().get(0);
 		BorderUtils.assignNew(world);
