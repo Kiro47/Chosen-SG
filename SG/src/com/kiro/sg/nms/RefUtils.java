@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 public class RefUtils
 {
@@ -39,6 +40,21 @@ public class RefUtils
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static void removeFinal(Field field)
+	{
+
+		try
+		{
+			Field modifiersField = Field.class.getDeclaredField("modifiers");
+			modifiersField.setAccessible(true);
+			modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public static Class<?> getNMS(String className)

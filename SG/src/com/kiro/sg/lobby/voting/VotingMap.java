@@ -30,11 +30,22 @@ public class VotingMap
 	private final Location sign2;
 	private VotingOption option;
 	private String[] arenaName;
+	private final Location[] maps;
 
-	public VotingMap(Location... maps)
+	public VotingMap(Location[] maps)
 	{
+		this.maps = maps;
 		VotingMaps.add(this);
 		mapViews = new LinkedList<>();
+		reset();
+		sign1 = maps[1].clone().add(0, 1, 0);
+		sign2 = maps[0].clone().add(0, 1, 0);
+	}
+
+
+	public void reset()
+	{
+		mapViews.clear();
 		for (Location map : maps)
 		{
 			MapView view = Bukkit.createMap(map.getWorld());
@@ -43,8 +54,6 @@ public class VotingMap
 			mapViews.add(view);
 			Maps.put(map, this);
 		}
-		sign1 = maps[1].clone().add(0, 1, 0);
-		sign2 = maps[0].clone().add(0, 1, 0);
 	}
 
 	public static VotingMap defineMap(Location location)
@@ -183,6 +192,7 @@ public class VotingMap
 	public void setVotingOption(VotingOption option)
 	{
 		this.option = option;
+		reset();
 		mapRenderer.loadImage(this.option == null ? null : this.option.getMapImageName(), this);
 		arenaName = null;
 		setSigns();

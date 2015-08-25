@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 public class BorderUtils
 {
@@ -21,14 +20,12 @@ public class BorderUtils
 			worldBorder_class = RefUtils.getNMS("WorldBorder");
 			worldBorder_field = RefUtils.findField(RefUtils.getNMS("World"), worldBorder_class);
 			worldBorder_field.setAccessible(true);
-			Field modifiersField = Field.class.getDeclaredField("modifiers");
-			modifiersField.setAccessible(true);
-			modifiersField.setInt(worldBorder_field, worldBorder_field.getModifiers() & ~Modifier.FINAL);
+			RefUtils.removeFinal(worldBorder_field);
 
 			Class<?> clz = Bukkit.getWorlds().get(0).getWorldBorder().getClass();
 			wbHandle_field = clz.getDeclaredField("handle");
 			wbHandle_field.setAccessible(true);
-			modifiersField.setInt(wbHandle_field, wbHandle_field.getModifiers() & ~Modifier.FINAL);
+			RefUtils.removeFinal(wbHandle_field);
 
 
 		}
