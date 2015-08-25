@@ -2,7 +2,9 @@ package com.kiro.sg.listeners.game;
 
 import com.kiro.sg.custom.CustomItem;
 import com.kiro.sg.custom.events.PlayerDamageByPlayerEvent;
+
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,6 +32,10 @@ public class CustomItemsListener implements Listener
 					{
 						if (item.useItem(event.getPlayer(), event.getAction(), event.getClickedBlock(), event.getBlockFace()))
 						{
+							// Slowball right click check
+							if (stack.equals(Material.SNOW_BALL)) {
+								if (event.getAction() != Action.RIGHT_CLICK_AIR|| event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+							}
 							event.setCancelled(true);
 						}
 					}
